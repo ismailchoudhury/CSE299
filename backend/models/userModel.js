@@ -14,15 +14,11 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  isAdmin: {
-    type: Boolean,
-    default: false, // By default, new users are not admins
-  },
 });
 
 // static signup method
-userSchema.statics.signup = async function (email, password, isAdmin) {
-  // Validation
+userSchema.statics.signup = async function (email, password) {
+  // validation
   if (!email || !password) {
     throw Error("All fields must be filled");
   }
@@ -42,8 +38,7 @@ userSchema.statics.signup = async function (email, password, isAdmin) {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
 
-  // Determine if the new user is a  admin
-  const user = await this.create({ email, password: hash, isAdmin });
+  const user = await this.create({ email, password: hash });
 
   return user;
 };
