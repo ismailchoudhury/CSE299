@@ -113,4 +113,23 @@ const verifySeller = async (req, res) => {
   //   res.status(400).json({ error: error.message });
   // }
 };
-module.exports = { signupUser, loginUser, isAdmin, verifySeller };
+
+const deleteSeller = async (req, res) => {
+  const sellerId = req.body.sellerId; // Assuming the sellerId is passed as a route parameter
+
+  try {
+    // Find the seller by ID and remove it
+    const deletedSeller = await Seller.findByIdAndRemove(sellerId);
+
+    if (!deletedSeller) {
+      return res.status(403).json({ message: "Seller not found" });
+    }
+
+    return res.status(200).json({ message: "Seller deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Failed to delete the seller" });
+  }
+};
+
+module.exports = { signupUser, loginUser, isAdmin, verifySeller, deleteSeller };
