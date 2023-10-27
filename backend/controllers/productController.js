@@ -6,12 +6,13 @@ const createProduct = async (req, res) => {
     const { name, description, price, category, imgURL, seller, stock } =
       req.body;
 
-    // // Check if the seller is a verified seller
-    // if (req.seller.isVerified == false) {
-    //   return res
-    //     .status(403)
-    //     .json({ error: "Only verified sellers can create products" });
-    // }
+    // Check if the seller is a verified seller
+
+    if (req.body.seller.isVerified == false) {
+      return res
+        .status(403)
+        .json({ error: "Only verified sellers can create products" });
+    }
 
     const product = new Product({
       name,
@@ -23,9 +24,8 @@ const createProduct = async (req, res) => {
       stock, // You can set the initial stock here or provide it in the request body
       // Add more fields as needed
     });
-
-    const newProduct = await product.save();
-    res.status(201).json(newProduct);
+    await product.save();
+    res.status(201).json(product);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to create a product" });
@@ -82,6 +82,7 @@ const updateProduct = async (req, res) => {
         price,
         category,
         imgURL,
+        seller,
         stock,
         // Add more fields as needed
       },

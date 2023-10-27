@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import "./Home.css";
 
+import { Button } from "react-bootstrap";
 const Home = () => {
   const { user } = useAuthContext();
   const [products, setProducts] = useState(null);
@@ -39,8 +40,9 @@ const Home = () => {
                   <p className="price">Price: ৳{product.price}</p>
                   <p className="stock">Stock: {product.stock}</p>
                   <p className="description">{product.description}</p>
+
                   {product.seller && (
-                    <p className="seller">Seller: {product.seller.name}</p>
+                    <p className="seller">Seller: {product.seller.id}</p>
                   )}
                 </div>
               </div>

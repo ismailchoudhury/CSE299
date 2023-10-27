@@ -9,12 +9,13 @@ const createToken = _id => {
 
 // Login a user
 const loginUser = async (req, res) => {
-  const { email, password, role } = req.body; // Add role field to the request body
+  // console.log(req.body);
+  const { email, password, userType } = req.body; // Add userType field to the request body
 
   try {
     let user;
 
-    switch (role) {
+    switch (userType) {
       case "customer":
         user = await User.login(email, password);
         break;
@@ -35,7 +36,7 @@ const loginUser = async (req, res) => {
     // Create a token
     const token = createToken(user._id);
 
-    res.status(200).json({ email, token });
+    res.status(200).json({ email, token, userType });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -43,12 +44,12 @@ const loginUser = async (req, res) => {
 
 // Signup a user (with optional super admin flag)
 const signupUser = async (req, res) => {
-  const { email, password, role } = req.body; // Add role and isAdmin fields to the request body
+  const { email, password, userType } = req.body; // Add userType and isAdmin fields to the request body
 
   try {
     let user;
 
-    switch (role) {
+    switch (userType) {
       case "customer":
         user = await User.signup(email, password);
         break;
@@ -63,7 +64,7 @@ const signupUser = async (req, res) => {
     }
 
     if (!user) {
-      return res.status(400).json({ error: "Invalid Role" });
+      return res.status(400).json({ error: "Invalid userType" });
     }
 
     // Create a token

@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-// const User = require("../models/userModel");
+const User = require("../models/userModel");
 const Seller = require("../models/sellerModel");
-// const Admin = require("../models/adminModel");
+const Admin = require("../models/adminModel");
 
 const requireAuth = async (req, res, next) => {
   // verify seller is authenticated

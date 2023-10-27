@@ -4,9 +4,11 @@ const AddProduct = () => {
   const [productData, setProductData] = useState({
     name: "",
     description: "",
-    price: 0,
+    price: "",
     category: "",
     imgURL: "",
+    seller: "",
+    stock: "",
   });
 
   const handleInputChange = e => {
@@ -17,17 +19,37 @@ const AddProduct = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    // Here, you can send the product data to your backend API for processing.
-    console.log("Product Data Submitted:", productData);
+    try {
+      const response = await fetch("/api/products/createproduct/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(productData),
+      });
 
-    // Reset the form or perform any other actions after submission.
-    setProductData({
-      name: "",
-      description: "",
-      price: 0,
-      category: "",
-      imgURL: "",
-    });
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error:", errorData);
+        // You can handle the error here, e.g., display an error message.
+        return;
+      }
+
+      // Handle success, e.g., reset the form or perform any other actions.
+      console.log("Product Data Submitted:", productData);
+      setProductData({
+        name: "",
+        description: "",
+        price: "",
+        category: "",
+        imgURL: "",
+        seller: "",
+        stock: "",
+      });
+    } catch (error) {
+      console.error("An error occurred during the POST request:", error);
+      // You can handle the error here, e.g., display an error message.
+    }
   };
 
   return (
@@ -95,6 +117,32 @@ const AddProduct = () => {
             id="imgURL"
             name="imgURL"
             value={productData.imgURL}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="seller" className="form-label">
+            Seller:
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="seller"
+            name="seller"
+            value={productData.seller}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="stock" className="form-label">
+            Stock:
+          </label>
+          <input
+            type="number"
+            className="form-control"
+            id="stock"
+            name="stock"
+            value={productData.stock}
             onChange={handleInputChange}
           />
         </div>

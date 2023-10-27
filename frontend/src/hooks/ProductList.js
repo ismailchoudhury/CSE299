@@ -33,7 +33,7 @@ function ProductList() {
             <p>{product.description}</p>
             <p>Price: ${product.price}</p>
             <p>Category: {product.category}</p>
-            <p>Category: {product.product}</p>
+            <p>Category: {product.imgURL}</p>
           </li>
         ))}
       </ul>

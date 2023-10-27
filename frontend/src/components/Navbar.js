@@ -3,7 +3,7 @@ import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { GiShop } from "react-icons/gi";
 import { useState } from "react";
-
+import AddProduct from "../pages/Seller/addProduct";
 const Navbar = () => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
@@ -16,41 +16,33 @@ const Navbar = () => {
     logout();
   };
 
-  const handleToggle = () => {
-    setIsAddProduct(prev => !prev);
-    if (!isAddProduct) {
-      navigate("/");
-    }
-  };
+  // const handleToggle = () => {
+  //   setIsAddProduct(prev => !prev);
+  //   if (!isAddProduct) {
+  //     navigate("/");
+  //   }
+  // };
 
   return (
-    <header className="navbar">
+    <header>
       <div className="container">
-        <Link to="/" className="logo">
+        <Link to="/">
           <h1>
             <GiShop size={25} /> Shopify
           </h1>
         </Link>
         <nav>
           {user && (
-            <div className="user-info">
-              {
-                (user.isAdmin = true && (
-                  <button className="toggle-button" onClick={handleToggle}>
-                    {buttonLabel}
-                  </button>
-                ))
-              }
-              <span className="user-email">{user.email}</span>
-              <button className="logout-button" onClick={handleClick}>
-                Log out
-              </button>
+            <div>
+              <span>{user.email}</span>
+              <button onClick={handleClick}>Log out</button>
             </div>
           )}
           {!user && (
-            <div className="auth-links">
+            <div>
               <Link to="/login">Login</Link>
               <Link to="/signup">Signup</Link>
+              {/* <Link to="/addProduct">Add Products</Link> */}
             </div>
           )}
         </nav>
