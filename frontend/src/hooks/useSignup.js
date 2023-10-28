@@ -6,14 +6,26 @@ export const useSignup = () => {
   const [isLoading, setIsLoading] = useState(null);
   const { dispatch } = useAuthContext();
 
-  const signup = async (email, password) => {
+  const signup = async (email, password, userType) => {
     setIsLoading(true);
     setError(null);
+
+    // const allowedUserTypes = ["admin", "customer", "seller"];
+    // const isUserType = userType.includes(allowedUserTypes);
+    // console.log(userType);
+
+    // console.log(isUserType);
+
+    // if (!isUserType) {
+    //   setIsLoading(false);
+    //   setError("Invalid user type. Please select 'customer' or 'seller.'");
+    //   return;
+    // }
 
     const response = await fetch("/api/user/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, userType }),
     });
     const json = await response.json();
 

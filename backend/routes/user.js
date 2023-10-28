@@ -1,14 +1,26 @@
-const express = require('express')
+const express = require("express");
 
-// controller functions
-const { loginUser, signupUser } = require('../controllers/userController')
+// Controller functions
+const {
+  loginUser,
+  signupUser,
+  isAdmin,
+  verifySeller,
+  deleteSeller,
+  getVerifiedSellers,
+  getUnverifiedSellers,
+} = require("../controllers/userController");
 
-const router = express.Router()
+const router = express.Router();
 
-// login route
-router.post('/login', loginUser)
+// Login route
+router.post("/login", loginUser);
 
-// signup route
-router.post('/signup', signupUser)
+// Signup route for regular users
+router.post("/signup", signupUser);
+router.patch("/verify-seller", isAdmin, verifySeller);
+router.delete("/delete-seller", isAdmin, deleteSeller);
+router.get("/getVerified-sellers", getVerifiedSellers);
+router.get("/getUnverified-sellers", getUnverifiedSellers);
 
-module.exports = router
+module.exports = router;

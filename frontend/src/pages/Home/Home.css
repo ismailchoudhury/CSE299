@@ -1,0 +1,85 @@
+/* Reset some default styles */
+.product-page body,
+.product-page h1,
+.product-page h2,
+.product-page p {
+  margin: 0;
+  padding: 0;
+}
+
+/* Set a global font family and background color */
+.product-page body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 20px;
+}
+
+/* Style the container div */
+.product-page div {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+}
+
+/* Style the product container */
+.product-page .product-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 100%; /* Ensure products stay within the container */
+}
+
+/* Style the product div */
+.product-page .product {
+  flex: 0 0 23%;
+  /* 23% allows for 4 products side by side with a small gap */
+  /* margin-bottom: 20px; */
+  padding: 10px;
+  /* border: 1px solid #ddd; */
+  border-radius: 5px;
+  /* background-color: #fff; */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  text-align: center; /* Center-align content */
+}
+
+/* Style the product title */
+.product-page h2 {
+  font-size: 16px; /* Reduce font size for the product name */
+  /* margin: 10px 0; */
+  /* color: #333; */
+}
+
+/* Style the product description */
+.product-page p {
+  font-size: 12px; /* Reduce font size for description, price, and category */
+  color: #666;
+}
+
+/* Style the product content container */
+.product-page .product-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Style the product image */
+.product-page .product-image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Style the product image */
+.product-page .product-image {
+  max-width: 100%;
+  max-height: 100%; /* Maintain aspect ratio and square shape */
+  object-fit: contain; /* Maintain image aspect ratio */
+  border-radius: 5px;
+  /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); */
+}

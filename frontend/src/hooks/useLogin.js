@@ -6,27 +6,42 @@ export const useLogin = () => {
   const [isLoading, setIsLoading] = useState(null);
   const { dispatch } = useAuthContext();
 
-  const login = async (email, password) => {
+  const login = async (email, password, userType) => {
     setIsLoading(true);
     setError(null);
 
-    const response = await fetch("/api/user/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    const json = await response.json();
+    // const allowedUserTypes = ["customer", "admin", "seller"];
 
-    if (!response.ok) {
-      setIsLoading(false);
-      setError(json.error);
-    }
-    if (response.ok) {
+    // if (!allowedUserTypes.includes(userType)) {
+    //   setIsLoading(false);
+    //   setError("Invalid user type");
+    //   return;
+    // }
+
+    try {
+      const response = await fetch("/api/user/login/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, userType }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setIsLoading(false);
+        setError(errorData.error);
+        return;
+      }
+
+      const json = await response.json();
       localStorage.setItem("user", JSON.stringify(json));
-
       dispatch({ type: "LOGIN", payload: json });
 
+      // Access the userTypze property from the JSON response
+
       setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      setError("An error occurred during login.");
     }
   };
 
