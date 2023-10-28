@@ -1,0 +1,26 @@
+.seller-list {
+  margin-top: 0;
+}
+
+.approved-seller-list {
+  margin-top: 0;
+}
+.seller-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.approved-seller-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.seller-list li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.approved-seller-list li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}

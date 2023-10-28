@@ -7,6 +7,8 @@ const {
   isAdmin,
   verifySeller,
   deleteSeller,
+  getVerifiedSellers,
+  getUnverifiedSellers,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -18,5 +20,7 @@ router.post("/login", loginUser);
 router.post("/signup", signupUser);
 router.patch("/verify-seller", isAdmin, verifySeller);
 router.delete("/delete-seller", isAdmin, deleteSeller);
+router.get("/getVerified-sellers", getVerifiedSellers);
+router.get("/getUnverified-sellers", getUnverifiedSellers);
 
 module.exports = router;

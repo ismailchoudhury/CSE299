@@ -10,13 +10,17 @@ export const useSignup = () => {
     setIsLoading(true);
     setError(null);
 
-    const allowedUserTypes = ["customer", "seller"];
+    // const allowedUserTypes = ["admin", "customer", "seller"];
+    // const isUserType = userType.includes(allowedUserTypes);
+    // console.log(userType);
 
-    if (!userType.includes(allowedUserTypes)) {
-      setIsLoading(false);
-      setError("Invalid user type. Please select 'customer' or 'seller.'");
-      return;
-    }
+    // console.log(isUserType);
+
+    // if (!isUserType) {
+    //   setIsLoading(false);
+    //   setError("Invalid user type. Please select 'customer' or 'seller.'");
+    //   return;
+    // }
 
     const response = await fetch("/api/user/signup", {
       method: "POST",

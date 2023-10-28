@@ -11,12 +11,12 @@ const Signup = () => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    const allowedUserTypes = ["customer", "seller"];
+    const allowedUserTypes = ["admin", "customer", "seller"];
 
     if (allowedUserTypes.includes(userType)) {
-      await signup(email, password);
+      await signup(email, password, userType);
     } else {
-      alert("Invalid user type. Please select 'customer,' or 'seller.'");
+      alert("here Invalid user type. Please select 'customer,' or 'seller.'");
     }
   };
 
@@ -40,6 +40,7 @@ const Signup = () => {
         <label>Signup as:</label>
         <select value={userType} onChange={e => setUserType(e.target.value)}>
           <option value="">Select user type</option>
+          <option value="admin">Admin</option>
           <option value="customer">Customer</option>
           <option value="seller">Seller</option>
         </select>

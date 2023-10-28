@@ -21,11 +21,11 @@ function App() {
 
   console.log(user);
 
-  let conditionalRedirect = null;
+  // let conditionalRedirect = null;
 
-  if (user && usert) {
-    conditionalRedirect = <Route to="/addProduct" />;
-  }
+  // if (user && usert) {
+  //   conditionalRedirect = <Route to="/addProduct" />;
+  // }
 
   return (
     <div className="App">

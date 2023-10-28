@@ -133,4 +133,40 @@ const deleteSeller = async (req, res) => {
   }
 };
 
-module.exports = { signupUser, loginUser, isAdmin, verifySeller, deleteSeller };
+const getVerifiedSellers = async (req, res) => {
+  try {
+    const UnverifiedSellers = await Seller.find({
+      userType: "seller",
+      isVerified: true,
+    });
+
+    res.status(200).json(UnverifiedSellers);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to retrieve unverified sellers" });
+  }
+};
+
+const getUnverifiedSellers = async (req, res) => {
+  try {
+    const UnverifiedSellers = await Seller.find({
+      userType: "seller",
+      isVerified: false,
+    });
+
+    res.status(200).json(UnverifiedSellers);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to retrieve unverified sellers" });
+  }
+};
+
+module.exports = {
+  signupUser,
+  loginUser,
+  isAdmin,
+  verifySeller,
+  deleteSeller,
+  getVerifiedSellers,
+  getUnverifiedSellers,
+};

@@ -26,6 +26,7 @@ const Login = () => {
         navigate("/addProduct");
         break;
       case "admin":
+        navigate("/verifySeller");
         break;
       default:
     }
