@@ -9,6 +9,9 @@ const {
   deleteSeller,
   getVerifiedSellers,
   getUnverifiedSellers,
+  getCart,
+  addToCart,
+  removeFromCart,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -22,5 +25,8 @@ router.patch("/verify-seller", isAdmin, verifySeller);
 router.delete("/delete-seller", isAdmin, deleteSeller);
 router.get("/getVerified-sellers", getVerifiedSellers);
 router.get("/getUnverified-sellers", getUnverifiedSellers);
+router.get("/get-cart", getCart);
+router.post("/add-to-cart", addToCart);
+router.post("/remove-from-cart", removeFromCart);
 
 module.exports = router;
