@@ -12,15 +12,15 @@ const Login = () => {
   const handleLogin = async e => {
     e.preventDefault();
 
-    const allowedUserTypes = ["customer", "admin", "seller"];
-    console.log(email);
-    console.log(password);
-    console.log(userType);
+    // const allowedUserTypes = ["customer", "admin", "seller"];
+    // console.log(email);
+    // console.log(password);
+    // console.log(userType);
 
     await login(email, password, userType);
     switch (userType) {
       case "customer":
-        navigate("/");
+        navigate("/productHome");
         break;
       case "seller":
         navigate("/addProduct");

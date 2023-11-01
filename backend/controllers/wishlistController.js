@@ -1,73 +1,86 @@
-const Wishlist = require("../models/Wishlist");
+const Wishlist = require("../models/wishlist");
+const Product = require("../models/product");
 
-// Create a new wishlist
-const createWishlist = async (req, res) => {
-  try {
-    const wishlist = new Wishlist(req.body);
-    await wishlist.save();
-    res.status(201).json(wishlist);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to create wishlist" });
-  }
-};
+const User = require("../models/userModel");
 
-// Get a user's wishlist
 const getWishlist = async (req, res) => {
   try {
-    const wishlist = await Wishlist.findOne({ user: req.user._id });
-    if (!wishlist) {
-      return res.status(404).json({ message: "Wishlist not found" });
+    const userId = req.body.userId;
+
+    const userWishlist = await Wishlist.find({ user: userId });
+
+    if (!userWishlist) {
+      return res
+        .status(404)
+        .json({ message: "Wishlist not found for the user." });
     }
-    res.status(200).json(wishlist);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to retrieve wishlist" });
+
+    return res.status(200).json({ userWishlist });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error." });
   }
 };
-
-// Add a product to the wishlist
 const addToWishlist = async (req, res) => {
   try {
-    const wishlist = await Wishlist.findOne({ user: req.user._id });
-    if (!wishlist) {
-      return res.status(404).json({ message: "Wishlist not found" });
+    const { userId, productId } = req.body;
+
+    const user = await User.findById({ _id: userId });
+    const product = await Product.findById({ _id: productId });
+
+    if (!user || !product) {
+      console.log("here");
+      return res.status(404).json({ message: "User or product not found." });
     }
 
-    // Assuming req.body.productId is the product to add
-    wishlist.products.push({ product: req.body.productId });
+    const wishlistItem = await Wishlist.findOne({
+      user: userId,
+      product: productId,
+    });
 
-    await wishlist.save();
-    res.status(200).json(wishlist);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to add product to wishlist" });
+    if (wishlistItem) {
+      return res.json({ message: "Product is already in the wishlist." });
+    }
+
+    const newWishlistItem = new Wishlist({
+      user: userId,
+      product: productId,
+    });
+
+    await newWishlistItem.save();
+
+    return res
+      .status(200)
+      .json({ message: "Product added to the wishlist successfully." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error." });
   }
 };
 
-// Remove a product from the wishlist
 const removeFromWishlist = async (req, res) => {
   try {
-    const wishlist = await Wishlist.findOne({ user: req.user._id });
-    if (!wishlist) {
-      return res.status(404).json({ message: "Wishlist not found" });
+    const { userId, productId } = req.body;
+
+    const wishlistItem = await Wishlist.findOne({
+      user: userId,
+      product: productId,
+    });
+
+    if (!wishlistItem) {
+      return res.status(404).json({ message: "Wishlist item not found." });
     }
 
-    // Assuming req.params.productId is the product to remove
-    wishlist.products = wishlist.products.filter(
-      item => item.product.toString() !== req.params.productId
-    );
+    await wishlistItem.remove();
 
-    await wishlist.save();
-    res.status(200).json(wishlist);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to remove product from wishlist" });
+    return res.status(200).json({ message: "Product removed from wishlist." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error." });
   }
 };
 
 module.exports = {
-  createWishlist,
   getWishlist,
   addToWishlist,
   removeFromWishlist,

@@ -9,6 +9,9 @@ import Signup from "./pages/Signup";
 import Navbar from "./components/Navbar";
 import AddProduct from "./pages/Seller/addProduct";
 import SellerList from "./pages/Admin/verifySeller";
+import ProductHome from "./pages/productHome/productHome";
+import Cart from "./pages/Cart/cart";
+import Checkout from "./pages/Checkout/checkout";
 
 function App() {
   // Use the useAuthContext hook to access the user info
@@ -37,6 +40,9 @@ function App() {
           <Route path="/SignUp" element={<Signup />} />
           <Route path="/addProduct" element={<AddProduct />} />;
           <Route path="/verifySeller" element={<SellerList />} />
+          <Route path="/productHome" element={<ProductHome />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -31,11 +31,9 @@ const AddProduct = () => {
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Error:", errorData);
-        // You can handle the error here, e.g., display an error message.
         return;
       }
 
-      // Handle success, e.g., reset the form or perform any other actions.
       console.log("Product Data Submitted:", productData);
       setProductData({
         name: "",
@@ -48,7 +46,6 @@ const AddProduct = () => {
       });
     } catch (error) {
       console.error("An error occurred during the POST request:", error);
-      // You can handle the error here, e.g., display an error message.
     }
   };
 

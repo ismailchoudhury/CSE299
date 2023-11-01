@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAuthContext } from "../../hooks/useAuthContext";
 import "./Home.css";
 
-import { Button } from "react-bootstrap";
 const Home = () => {
-  const { user } = useAuthContext();
   const [products, setProducts] = useState(null);
 
   useEffect(() => {
@@ -42,7 +39,7 @@ const Home = () => {
                   <p className="description">{product.description}</p>
 
                   {product.seller && (
-                    <p className="seller">Seller: {product.seller.id}</p>
+                    <p className="seller">Seller: {product.seller.email}</p>
                   )}
                 </div>
               </div>

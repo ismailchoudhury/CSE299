@@ -18,12 +18,12 @@ router.post("/createproduct", createProduct);
 router.get("/", getAllProducts);
 
 // Get a single product by ID (for clients and admin)
-router.get("/id", getProductById);
+router.get("/getProductById", getProductById);
 
 // Update a product by ID (only for the seller of the product)
-router.patch("/id", updateProduct);
+router.patch("/update", updateProduct);
 
 // Delete a product by ID (only for the seller of the product)
-router.delete("/id", deleteProduct);
+router.delete("/", deleteProduct);
 
 module.exports = router;

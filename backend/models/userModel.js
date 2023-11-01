@@ -14,12 +14,6 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  cart: [
-    {
-      productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
-      quantity: Number,
-    },
-  ],
 });
 // static signup method
 userSchema.statics.signup = async function (email, password) {

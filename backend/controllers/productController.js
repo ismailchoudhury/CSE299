@@ -3,12 +3,17 @@ const Seller = require("../models/sellerModel");
 // Create a new product
 const createProduct = async (req, res) => {
   try {
-    const { name, description, price, category, imgURL, seller, stock } =
+    const { name, description, price, category, imgURL, sellerId, stock } =
       req.body;
 
-    // Check if the seller is a verified seller
+    // Find the seller by their ID
+    const seller = await Seller.findOne({ _id: sellerId });
 
-    if (req.body.seller.isVerified == false) {
+    if (!seller) {
+      return res.status(404).json({ error: "Seller not found" });
+    }
+
+    if (!seller.isVerified) {
       return res
         .status(403)
         .json({ error: "Only verified sellers can create products" });
@@ -20,9 +25,8 @@ const createProduct = async (req, res) => {
       price,
       category,
       imgURL,
-      seller, // Set the seller ID from the authenticated seller
-      stock, // You can set the initial stock here or provide it in the request body
-      // Add more fields as needed
+      seller: sellerId,
+      stock,
     });
     await product.save();
     res.status(201).json(product);
@@ -46,11 +50,12 @@ const getAllProducts = async (req, res) => {
 // Get a single product by ID
 const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
-    if (!product) {
+    const productId = req.body.productId; // Assuming productId is a route parameter
+    const productToGet = await Product.findById(productId);
+    if (!productToGet) {
       return res.status(404).json({ message: "Product not found" });
     }
-    res.status(200).json(product);
+    res.status(200).json(productToGet);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to retrieve the product" });
@@ -101,19 +106,27 @@ const updateProduct = async (req, res) => {
 // Delete a product by ID
 const deleteProduct = async (req, res) => {
   try {
-    const existingProduct = await Product.findById(req.params.id);
+    const { sellerId, productId } = req.body;
 
-    // Check if the seller is a verified seller and the product belongs to them
-    if (
-      !req.seller.isVerified ||
-      req.seller._id.toString() !== existingProduct.sellerID.toString()
-    ) {
-      return res
-        .status(403)
-        .json({ error: "Only the seller can delete this product" });
+    // Find the seller by their ID
+    const seller = await Seller.findOne({ _id: sellerId });
+
+    // const product = await Product.findOne({ _id: productId });
+
+    // console.log(seller._id.toString());
+    // console.log(product.seller.toString());
+
+    if (!seller) {
+      return res.status(404).json({ error: "Seller not found" });
     }
 
-    const deletedProduct = await Product.findByIdAndRemove(req.params.id);
+    if (!seller.isVerified) {
+      return res
+        .status(403)
+        .json({ error: "Only verified sellers can delete products" });
+    }
+
+    const deletedProduct = await Product.findByIdAndRemove(productId);
     if (!deletedProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
