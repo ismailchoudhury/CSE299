@@ -141,10 +141,33 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const searchProducts = async (req, res) => {
+  try {
+    const searchQuery = req.query.q;
+
+    const products = await Product.find({
+      $text: {
+        $search: searchQuery,
+      },
+    });
+    console.log(products);
+    if (products.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No products found matching the search query" });
+    }
+
+    res.status(200).json(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to perform the search" });
+  }
+};
 module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
   updateProduct,
   deleteProduct,
+  searchProducts,
 };

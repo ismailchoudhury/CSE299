@@ -12,62 +12,19 @@ const getAllOrders = async (req, res) => {
     res.status(500).json({ error: "Error fetching orders" });
   }
 };
-// const getOrderByUserId = async (req, res) => {
-//   try {
-//     const userId = req.params.userId;
-//     const userOrders = await Order.find({ userId }).populate(
-//       "products.product"
-//     );
-//     if (!userOrders || userOrders.length === 0) {
-//       return res.status(404).json({ error: "No orders found for the user" });
-//     }
-//     res.json(userOrders);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: "Error fetching user orders" });
-//   }
-// };
-
-// const createOrder = async (req, res) => {
-//   try {
-//     const { userId } = req.body;
-//     const user = await User.findOne({ _id: userId });
-//     if (!user) {
-//       return res.status(404).json({ error: "User not found" });
-//     }
-
-//     const carts = await Cart.find({ user: user }).populate("product");
-
-//     // if (!userCart || userCart.length === 0) {
-//     //   return res.status(400).json({ error: "User's cart is empty" });
-//     // }
-
-//     // const orderDate = new Date();
-
-//     // const deliveryDate = new Date(orderDate);
-//     // deliveryDate.setDate(orderDate.getDate() + 3);
-
-//     // const products = userCart.map(cartItem => ({
-//     //   product: cartItem.product,
-//     //   quantity: cartItem.quantity,
-//     // }));
-
-//     // const totalAmount = userCart.reduce(
-//     //   (total, cartItem) => total + cartItem.product.price * cartItem.quantity,
-//     //   0
-//     // );
-
-//     const order = new Order({
-//       userId,
-//       carts,
-//     });
-
-//     await order.save();
-//     res.status(201).json(order);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: "Failed to create an order" });
-//   }
+const getOrderByUserId = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const userOrders = await Order.find({ userId }).populate("carts");
+    if (!userOrders || userOrders.length === 0) {
+      return res.status(404).json({ error: "No orders found for the user" });
+    }
+    res.json(userOrders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error fetching user orders" });
+  }
+};
 const createOrder = async (req, res) => {
   const userId = req.body.userId;
   try {
@@ -78,17 +35,26 @@ const createOrder = async (req, res) => {
     }
 
     // Fetch the user's cart items
-    const userCart = await Cart.find({ user: user });
+    const userCart = await Cart.find({ user: user }).populate("product");
 
     if (userCart.length === 0) {
       return res.status(400).json({ error: "User's cart is empty" });
     }
+    console.log(userCart);
+
+    // Extract the cart items into an array for the order
+    const orderItems = userCart.map(cartItem => ({
+      product: cartItem.product,
+      quantity: cartItem.quantity,
+    }));
 
     // Create the order using the user's cart items
     const order = new Order({
       userId: user._id,
-      carts: userCart,
+      carts: orderItems,
     });
+
+    console.log(order);
 
     await order.save();
 
@@ -102,4 +68,4 @@ const createOrder = async (req, res) => {
   }
 };
 
-module.exports = { getAllOrders, createOrder };
+module.exports = { getAllOrders, getOrderByUserId, createOrder };

@@ -7,7 +7,18 @@ const orderSchema = new mongoose.Schema({
     required: true,
   },
 
-  carts: [{ type: Schema.Types.ObjectId, ref: "Cart" }],
+  carts: [
+    {
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+      quantity: {
+        type: Number,
+        default: 0,
+      },
+    },
+  ],
   orderDate: { type: Date, default: Date.now },
   // totalAmount: {
   //   type: Number,

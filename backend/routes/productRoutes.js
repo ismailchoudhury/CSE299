@@ -7,6 +7,7 @@ const {
   getProductById,
   updateProduct,
   deleteProduct,
+  searchProducts,
 } = require("../controllers/productController");
 const { verifySeller } = require("../controllers/userController");
 const router = express.Router();
@@ -26,4 +27,5 @@ router.patch("/update", updateProduct);
 // Delete a product by ID (only for the seller of the product)
 router.delete("/", deleteProduct);
 
+router.get("/search", searchProducts);
 module.exports = router;
