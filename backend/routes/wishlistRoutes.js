@@ -8,7 +8,7 @@ const {
 
 const router = express.Router();
 
-router.get("/get-wishlist", getWishlist);
+router.get("/get-wishlist/:userId", getWishlist);
 router.post("/add-to-wishlist", addToWishlist);
 router.post("/remove-from-wishlist", removeFromWishlist);
 module.exports = router;

@@ -51,6 +51,44 @@ const Checkout = () => {
     const formattedDate = today.toISOString().split("T")[0];
     return formattedDate;
   };
+  const handleConfirmOrder = async () => {
+    try {
+      // Create a new order
+      const createOrderResponse = await fetch("/api/orders/createOrder", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: user.Id, userCart: cart }),
+      });
+
+      if (createOrderResponse.ok) {
+        // Order created successfully
+        // Proceed to delete the cart
+        const deleteCartResponse = await fetch(
+          `/api/cart/delete-cart/${user.Id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (deleteCartResponse.ok) {
+          // Cart deleted successfully
+          // Redirect to "/productHome"
+          // props.history.push("/productHome");
+        } else {
+          console.error("Error deleting cart:", deleteCartResponse.status);
+        }
+      } else {
+        console.error("Error creating order:", createOrderResponse.status);
+      }
+    } catch (error) {
+      console.error("Error during checkout:", error);
+    }
+  };
 
   return (
     <div className="cart-page">
@@ -87,8 +125,10 @@ const Checkout = () => {
             </p>
           </div>
           <div className="checkout-button-container">
-            <Link to="/checkout">
-              <button className="checkout-button">Confirm Order</button>
+            <Link to="/productHome">
+              <button className="checkout-button" onClick={handleConfirmOrder}>
+                Confirm Order
+              </button>
             </Link>
           </div>
         </div>

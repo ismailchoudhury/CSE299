@@ -1,4 +1,6 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { GiShop } from "react-icons/gi";
@@ -7,13 +9,53 @@ import "./Navbar.css";
 const Navbar = () => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
-  // const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchItem, setSearchItem] = useState([]);
+  const [showResults, setShowResults] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleClick = () => {
     logout();
   };
 
-  // Define the links based on the user's userType
+  const handleSearch = () => {
+    fetch(`/api/products/search?q=${searchQuery}`)
+      .then(response => response.json())
+      .then(data => {
+        setSearchItem(data);
+        setShowResults(true);
+        console.log(data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  const hideResults = () => {
+    setShowResults(false);
+  };
+
+  const handleSearchResultClick = result => {
+    navigate("/searchResults", { state: { searchResults: [result] } });
+  };
+
+  const renderSearchResults = () => {
+    if (showResults && searchItem.length > 0) {
+      return (
+        <div className="search-results">
+          <ul>
+            {searchItem.map((result, index) => (
+              <li key={index} onClick={() => handleSearchResultClick(result)}>
+                {result.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+    return null;
+  };
+
   const renderLinksBasedOnUserType = () => {
     if (!user) {
       // User is not logged in
@@ -30,6 +72,17 @@ const Navbar = () => {
       case "customer":
         return (
           <div>
+            <div className="search-box">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+              />
+              <Link to={"/search"}>
+                <button onClick={handleSearch}>Search</button>
+              </Link>
+            </div>
             <Link to="/productHome">Product Home</Link>
             <Link to="/cart">Cart</Link>
             <Link to="/wishlist">Wishlist</Link>
@@ -64,16 +117,18 @@ const Navbar = () => {
   };
 
   return (
-    <header className="navbar">
-      <div className="container">
-        <Link to="/" className="logo">
-          <h1>
-            <GiShop size={25} /> Shopify
-          </h1>
-        </Link>
-        <nav>{renderLinksBasedOnUserType()}</nav>
-      </div>
-    </header>
+    <div>
+      <header className="navbar">
+        <div className="container">
+          <Link to="/" className="logo">
+            <h1>
+              <GiShop size={25} /> Shopify
+            </h1>
+          </Link>
+          <nav>{renderLinksBasedOnUserType()}</nav>
+        </div>
+      </header>
+    </div>
   );
 };
 

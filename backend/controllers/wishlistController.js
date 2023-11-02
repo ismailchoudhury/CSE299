@@ -5,7 +5,7 @@ const User = require("../models/userModel");
 
 const getWishlist = async (req, res) => {
   try {
-    const userId = req.body.userId;
+    const userId = req.params.userId; // Extract userId from URL parameter
 
     const userWishlist = await Wishlist.find({ user: userId });
 
@@ -21,6 +21,7 @@ const getWishlist = async (req, res) => {
     return res.status(500).json({ message: "Server error." });
   }
 };
+
 const addToWishlist = async (req, res) => {
   try {
     const { userId, productId } = req.body;

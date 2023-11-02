@@ -87,8 +87,28 @@ const removeFromCart = async (req, res) => {
   }
 };
 
+const deleteCartByUserId = async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const result = await Cart.deleteMany({ user: userId });
+
+    if (result.deletedCount > 0) {
+      return res
+        .status(200)
+        .json({ message: `Carts for user ${userId} deleted successfully.` });
+    } else {
+      return res
+        .status(404)
+        .json({ message: `No carts found for user ${userId}.` });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error." });
+  }
+};
 module.exports = {
   getCart,
   addToCart,
   removeFromCart,
+  deleteCartByUserId,
 };

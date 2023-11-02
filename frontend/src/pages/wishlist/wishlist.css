@@ -1,0 +1,108 @@
+.wishlist-page {
+  /* background-color: lightblue; */
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  position: relative;
+}
+
+.wishlist-container {
+  background-color: white;
+  border: 1px solid lightblue;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.wishlist-list {
+  list-style: none;
+  padding: 0;
+}
+
+.wishlist-item {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.product-image {
+  max-width: 100px;
+  margin-right: 20px;
+}
+
+.product-details {
+  flex-grow: 1;
+}
+
+.product-name {
+  font-weight: bold;
+  margin: 0;
+}
+
+.product-price {
+  margin: 0;
+}
+
+.product-quantity {
+  margin: 0;
+}
+
+.product-actions {
+  display: flex;
+  align-items: center;
+}
+
+.action-button {
+  background-color: lightblue;
+  border: none;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 50%; /* Circular shape */
+  margin: 5px;
+  width: 30px; /* Width and height for the buttons */
+  height: 30px;
+}
+
+.increment-button {
+  background-color: lightgreen;
+}
+
+.decrement-button {
+  background-color: lightcoral;
+}
+
+.total-amount {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-weight: bold;
+  background-color: white;
+  border: 1px solid lightblue;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+.checkout-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 20px; /* Adjust the value to control the vertical position */
+  left: 0;
+  right: 0;
+}
+
+.checkout-button {
+  background-color: #007bff; /* Change the background color to your preference */
+  color: #fff; /* Text color */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.checkout-button:hover {
+  background-color: #0056b3; /* Change the background color on hover */
+}
