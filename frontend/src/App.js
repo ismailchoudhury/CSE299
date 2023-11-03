@@ -44,7 +44,7 @@ function App() {
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/search" element={<SearchResults />} />
+          <Route path="/searchResults" element={<SearchResults />} />
         </Routes>
       </BrowserRouter>
     </div>

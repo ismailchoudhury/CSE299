@@ -64,17 +64,17 @@ const ProductDetails = ({ productId }) => {
 
   useEffect(() => {
     // Fetch product details based on the product ID
-    console.log(`Fetching product details for productId: ${productId}`);
+    // console.log(`Fetching product details for productId: ${productId}`);
     fetch(`/api/products/getProductById/${productId}`)
       .then(response => {
-        console.log("Response:", response);
+        // console.log("Response:", response);
         if (response.ok) {
           return response.json();
         }
         throw new Error("Error fetching product details");
       })
       .then(data => {
-        console.log("Product data:", data);
+        // console.log("Product data:", data);
         setProduct(data);
         setIsLoading(false); // Set isLoading to false when the data is loaded
       })
