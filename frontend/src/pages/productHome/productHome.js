@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import "./CustomerHome.css";
 import { AuthContext } from "../../context/AuthContext";
-import { Link } from "react-router-dom"; // Import Link for navigation
+import { Link } from "react-router-dom";
 
 const ProductHome = () => {
   const [products, setProducts] = useState([]);
@@ -45,7 +45,7 @@ const ProductHome = () => {
         setCart([...cart, productId]);
         console.log("Successfully added to cart");
       } else {
-        console.error("Error adding to cart");
+        console.log("Cart exceeds product stock.");
       }
     } catch (error) {
       console.error("Error: " + error.message);
@@ -53,10 +53,9 @@ const ProductHome = () => {
   };
 
   const handleAddToWishlist = async productId => {
-    console.log();
     try {
-      const addwishlistUrltUrl = "/api/wishlist/add-to-wishlist/";
-      const response = await fetch(addwishlistUrltUrl, {
+      const addWishlistUrl = "/api/wishlist/add-to-wishlist/";
+      const response = await fetch(addWishlistUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +63,6 @@ const ProductHome = () => {
         body: JSON.stringify({ userId, productId }),
       });
       const data = await response.json();
-      console.log(data);
 
       if (data.message === "Product added to the wishlist successfully.") {
         setWishlist([...wishlist, productId]);
@@ -78,6 +76,7 @@ const ProductHome = () => {
       console.error("Error: " + error.message);
     }
   };
+
   return (
     <div className="product-page">
       <div className="product-container">
@@ -98,12 +97,16 @@ const ProductHome = () => {
                   <Link to={`/product/${product._id}`}>{product.name}</Link>
                 </h2>
                 <p className="price">Price: ৳{product.price}</p>
-                <button
-                  className="add-to-cart-button"
-                  onClick={() => handleAddToCart(product._id)}
-                >
-                  Add to Cart
-                </button>
+                {product.stock === 0 ? (
+                  <p className="out-of-stock">Out of stock</p>
+                ) : (
+                  <button
+                    className="add-to-cart-button"
+                    onClick={() => handleAddToCart(product._id)}
+                  >
+                    Add to Cart
+                  </button>
+                )}
                 <button
                   className="add-to-wishlist-button"
                   onClick={() => handleAddToWishlist(product._id)}

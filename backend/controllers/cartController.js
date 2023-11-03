@@ -30,6 +30,10 @@ const addToCart = async (req, res) => {
       return res.status(404).json({ message: "User or product not found." });
     }
 
+    if (product.stock === 0) {
+      return res.status(400).json({ message: "Product is out of stock." });
+    }
+
     let cartItem = await Cart.findOne({ user: userId, product: productId });
 
     if (!cartItem) {
@@ -50,6 +54,7 @@ const addToCart = async (req, res) => {
     }
 
     await cartItem.save();
+
     return res
       .status(200)
       .json({ message: "Product added to cart successfully." });
@@ -58,7 +63,6 @@ const addToCart = async (req, res) => {
     return res.status(500).json({ message: "Server error." });
   }
 };
-
 const removeFromCart = async (req, res) => {
   try {
     const { userId, productId } = req.body;

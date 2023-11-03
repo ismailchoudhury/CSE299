@@ -28,7 +28,7 @@ const ProductPage = () => {
         setCart([...cart, productId]);
         console.log("Successfully added to cart");
       } else {
-        console.error("Error adding to cart");
+        console.log("Product is already in the wishlist.");
       }
     } catch (error) {
       console.error("Error: " + error.message);

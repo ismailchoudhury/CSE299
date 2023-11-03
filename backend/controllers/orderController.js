@@ -25,8 +25,10 @@ const getOrderByUserId = async (req, res) => {
     res.status(500).json({ error: "Error fetching user orders" });
   }
 };
+
 const createOrder = async (req, res) => {
   const userId = req.body.userId;
+
   try {
     const user = await User.findOne({ _id: userId });
 
@@ -40,21 +42,39 @@ const createOrder = async (req, res) => {
     if (userCart.length === 0) {
       return res.status(400).json({ error: "User's cart is empty" });
     }
-    console.log(userCart);
-
-    // Extract the cart items into an array for the order
-    const orderItems = userCart.map(cartItem => ({
-      product: cartItem.product,
-      quantity: cartItem.quantity,
-    }));
 
     // Create the order using the user's cart items
-    const order = new Order({
-      userId: user._id,
-      carts: orderItems,
+    const orderItems = userCart.map(async cartItem => {
+      const product = cartItem.product;
+      const quantity = cartItem.quantity;
+
+      if (quantity > product.stock) {
+        return res.status(400).json({
+          error: `Quantity of ${product.name} exceeds product stock.`,
+        });
+      }
+
+      // Update the stock of the product
+      product.stock -= quantity;
+      await product.save();
+
+      return {
+        product: product,
+        quantity: quantity,
+      };
     });
 
-    console.log(order);
+    const orderItemsPromises = await Promise.all(orderItems);
+
+    // Check if any order item failed due to stock limitations
+    if (orderItemsPromises.some(item => item instanceof Error)) {
+      return;
+    }
+
+    const order = new Order({
+      userId: user._id,
+      carts: orderItemsPromises,
+    });
 
     await order.save();
 
