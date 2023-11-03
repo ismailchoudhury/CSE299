@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import "./CustomerHome.css";
 import { AuthContext } from "../../context/AuthContext";
+import { Link } from "react-router-dom"; // Import Link for navigation
 
 const ProductHome = () => {
   const [products, setProducts] = useState([]);
@@ -77,7 +78,6 @@ const ProductHome = () => {
       console.error("Error: " + error.message);
     }
   };
-
   return (
     <div className="product-page">
       <div className="product-container">
@@ -94,20 +94,16 @@ const ProductHome = () => {
                 </div>
               )}
               <div className="product-details">
-                <h2>{product.name}</h2>
-                <p className="category">Category: {product.category}</p>
+                <h2>
+                  <Link to={`/product/${product._id}`}>{product.name}</Link>
+                </h2>
                 <p className="price">Price: ৳{product.price}</p>
-                <p className="stock">Stock: {product.stock}</p>
-                <p className="description">{product.description}</p>
-                <p className="seller">Seller: {product.seller.email}</p>
-
                 <button
                   className="add-to-cart-button"
                   onClick={() => handleAddToCart(product._id)}
                 >
                   Add to Cart
                 </button>
-
                 <button
                   className="add-to-wishlist-button"
                   onClick={() => handleAddToWishlist(product._id)}
