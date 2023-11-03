@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
-// import "./wishlist.css";
+import "./wishlist.css";
 
 const Wishlist = () => {
   const { user } = useAuthContext();
@@ -19,7 +18,6 @@ const Wishlist = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         setWishlist(data.userWishlist);
       } else {
         console.error("Error fetching wishlist:", response.status);
@@ -31,9 +29,30 @@ const Wishlist = () => {
     }
   };
 
+  const removeFromWishlist = async (userId, productId) => {
+    try {
+      const response = await fetch("/api/wishlist/remove-from-wishlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, productId }),
+      });
+
+      if (response.ok) {
+        // Item removed successfully, refresh the wishlist
+        fetchWishlist();
+      } else {
+        console.error("Error removing item from wishlist:", response.status);
+      }
+    } catch (error) {
+      console.error("Error removing item from wishlist:", error);
+    }
+  };
+
   useEffect(() => {
     fetchWishlist();
-  }, []);
+  }, [user.Id]);
 
   return (
     <div className="wishlist-page">
@@ -56,6 +75,12 @@ const Wishlist = () => {
                   <p className="product-name">{item.product.name}</p>
                   <p className="product-price">৳{item.product.price}</p>
                 </div>
+                <button
+                  className="remove-button"
+                  onClick={() => removeFromWishlist(user.Id, item.product._id)}
+                >
+                  Remove
+                </button>
               </li>
             ))}
           </ul>

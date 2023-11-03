@@ -4,9 +4,8 @@ const Product = require("../models/product");
 const User = require("../models/userModel");
 
 const getWishlist = async (req, res) => {
+  const userId = req.params.userId;
   try {
-    const userId = req.params.userId; // Extract userId from URL parameter
-
     const userWishlist = await Wishlist.find({ user: userId });
 
     if (!userWishlist) {
@@ -15,7 +14,24 @@ const getWishlist = async (req, res) => {
         .json({ message: "Wishlist not found for the user." });
     }
 
-    return res.status(200).json({ userWishlist });
+    // Fetch product details for each wishlist item
+    const wishlistWithProductDetails = await Promise.all(
+      userWishlist.map(async item => {
+        const product = await Product.findById(item.product);
+
+        if (product) {
+          // Include product details in the item
+          return {
+            ...item.toObject(),
+            product: product.toObject(),
+          };
+        } else {
+          return item;
+        }
+      })
+    );
+
+    return res.status(200).json({ userWishlist: wishlistWithProductDetails });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error." });

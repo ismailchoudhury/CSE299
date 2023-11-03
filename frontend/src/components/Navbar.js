@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { GiShop } from "react-icons/gi";
@@ -12,19 +12,20 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchItem, setSearchItem] = useState([]);
   const [showResults, setShowResults] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleClick = () => {
     logout();
   };
 
   const handleSearch = () => {
+    console.log(searchQuery);
+
     fetch(`/api/products/search?q=${searchQuery}`)
       .then(response => response.json())
       .then(data => {
         setSearchItem(data);
         setShowResults(true);
-        console.log(data);
       })
       .catch(error => {
         console.error(error);
@@ -84,6 +85,7 @@ const Navbar = () => {
               </Link>
             </div>
             <Link to="/productHome">Product Home</Link>
+            <Link to="/orders">Orders</Link> {/* Add Orders button */}
             <Link to="/cart">Cart</Link>
             <Link to="/wishlist">Wishlist</Link>
             <span>{user.userType}</span>

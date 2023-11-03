@@ -12,20 +12,15 @@ const {
 const { verifySeller } = require("../controllers/userController");
 const router = express.Router();
 
-// Create a new product (only for verified sellers)
-router.post("/createproduct", createProduct);
+router.post("/createproduct", createProduct); // Create a new product (only for verified sellers)
 
-// Get a list of all products (for clients and admin)
-router.get("/", getAllProducts);
+router.get("/", getAllProducts); // Get a list of all products (for clients and admin)
 
-// Get a single product by ID (for clients and admin)
-router.get("/getProductById", getProductById);
+router.get("/getProductById/:productId", getProductById); // Get a single product by ID (for clients and admin)
 
-// Update a product by ID (only for the seller of the product)
-router.patch("/update", updateProduct);
+router.patch("/update", updateProduct); // Update a product by ID (only for the seller of the product)
 
-// Delete a product by ID (only for the seller of the product)
-router.delete("/", deleteProduct);
+router.delete("/", deleteProduct); // Delete a product by ID (only for the seller of the product)
 
 router.get("/search", searchProducts);
 module.exports = router;

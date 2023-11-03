@@ -12,6 +12,7 @@ import SellerList from "./pages/Admin/verifySeller";
 import ProductHome from "./pages/productHome/productHome";
 import Cart from "./pages/Cart/cart";
 import Wishlist from "./pages/wishlist/wishlist";
+import Orders from "./pages/orders/orders";
 import Checkout from "./pages/Checkout/checkout";
 import SearchResults from "./pages/searchResults";
 function App() {
@@ -41,6 +42,7 @@ function App() {
           <Route path="/productHome" element={<ProductHome />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/orders" element={<Orders />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/search" element={<SearchResults />} />
         </Routes>

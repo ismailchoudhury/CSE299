@@ -19,7 +19,7 @@ const Cart = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setCart(data.userCart);
       } else {
         console.error("Error fetching cart:", response.status);

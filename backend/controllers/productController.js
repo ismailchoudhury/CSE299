@@ -1,3 +1,4 @@
+const { text } = require("express");
 const Product = require("../models/product");
 const Seller = require("../models/sellerModel");
 // Create a new product
@@ -50,10 +51,10 @@ const getAllProducts = async (req, res) => {
 // Get a single product by ID
 const getProductById = async (req, res) => {
   try {
-    const productId = req.body.productId; // Assuming productId is a route parameter
+    const productId = req.params.productId; // Assuming productId is a route parameter
     const productToGet = await Product.findById(productId);
     if (!productToGet) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({ error: "Product not found" });
     }
     res.status(200).json(productToGet);
   } catch (err) {
@@ -143,26 +144,21 @@ const deleteProduct = async (req, res) => {
 
 const searchProducts = async (req, res) => {
   try {
-    const searchQuery = req.query.q;
+    const keyword = req.query.keyword; // Assuming the search keyword is passed as a query parameter
 
-    const products = await Product.find({
-      $text: {
-        $search: searchQuery,
-      },
-    });
-    console.log(products);
-    if (products.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No products found matching the search query" });
+    if (!keyword) {
+      return res.status(400).json({ error: "Keyword is required for search" });
     }
+
+    const products = await Product.find({ $text: { $search: keyword } });
 
     res.status(200).json(products);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to perform the search" });
+    res.status(500).json({ error: "Failed to search for products" });
   }
 };
+
 module.exports = {
   createProduct,
   getAllProducts,
