@@ -63,7 +63,14 @@ const SellerOrders = () => {
         const productslist = data.map(order => {
           const orderId = order._id;
           const orderDate = order.orderDate;
-          const products = order.carts;
+
+          // Mapping through carts array to get product information
+          const products = order.carts.map(cartItem => {
+            return {
+              productId: cartItem.product._id,
+              quantity: cartItem.quantity,
+            };
+          });
 
           return {
             _id: orderId,
@@ -96,7 +103,7 @@ const SellerOrders = () => {
               <ul className="order-products">
                 {order.carts.map((cartItem, index) => (
                   <li key={index} className="product-item">
-                    <ProductDetails productId={cartItem.product} />
+                    <ProductDetails productId={cartItem.productId} />
                     <p className="product-quantity">
                       Quantity: {cartItem.quantity}
                     </p>
