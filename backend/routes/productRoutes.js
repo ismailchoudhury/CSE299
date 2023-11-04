@@ -9,6 +9,8 @@ const {
   updateProduct,
   deleteProduct,
   searchProducts,
+  getAllCategories,
+  getProductsByCategory,
 } = require("../controllers/productController");
 const { verifySeller } = require("../controllers/userController");
 const router = express.Router();
@@ -27,4 +29,7 @@ router.delete("/", deleteProduct); // Delete a product by ID (only for the selle
 
 router.get("/search", searchProducts);
 
+router.get("/categories", getAllCategories);
+
+router.get("/category/:category", getProductsByCategory);
 module.exports = router;

@@ -170,6 +170,28 @@ const searchProducts = async (req, res) => {
   }
 };
 
+const getAllCategories = async (req, res) => {
+  try {
+    // Use the distinct method to get all unique category values
+    const categories = await Product.distinct("category");
+    res.json(categories);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch categories" });
+  }
+};
+const getProductsByCategory = async (req, res) => {
+  const { category } = req.params;
+
+  try {
+    const products = await Product.find({ category });
+    console.log(category);
+    res.json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch products by category" });
+  }
+};
 module.exports = {
   createProduct,
   getAllProducts,
@@ -178,4 +200,6 @@ module.exports = {
   updateProduct,
   deleteProduct,
   searchProducts,
+  getAllCategories,
+  getProductsByCategory,
 };

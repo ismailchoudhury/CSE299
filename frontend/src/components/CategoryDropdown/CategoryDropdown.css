@@ -1,0 +1,69 @@
+/* CategoryDropdown.css */
+.category-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  background-color: transparent;
+  color: #333;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  font-size: 16px;
+  padding: 10px;
+  margin: 0;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #3498db; /* Set the background color to light blue */
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 5px; /* Add border-radius to make edges not sharp */
+}
+
+/* Make dropdown items appear one under another */
+.dropdown-content a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+.dropdown-content a:hover {
+  /* background-color: #0073e6; */
+  color: #fff;
+}
+
+.show {
+  display: block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #3498db; /* Set the background color to light blue */
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Make dropdown items appear one under another */
+.dropdown-content a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+.dropdown-content a:hover {
+  /* background-color: #0073e6; */
+  color: #fff;
+}
+
+.show {
+  display: block;
+}

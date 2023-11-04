@@ -1,5 +1,6 @@
 const express = require("express");
 const Order = require("../models/orderModel");
+const Product = require("../models/product");
 const User = require("../models/userModel");
 const Cart = require("../models/cartModel");
 // const { getCart } = require("../controllers/cartController");
@@ -25,7 +26,31 @@ const getOrderByUserId = async (req, res) => {
     res.status(500).json({ error: "Error fetching user orders" });
   }
 };
+const getOrdersBySellerId = async (req, res) => {
+  try {
+    const sellerId = req.params.sellerId; // Assuming sellerId is provided as a route parameter
 
+    // Step 1: Find products associated with the seller
+    const sellerProducts = await Product.find({ seller: sellerId });
+
+    // Step 2: Extract the product IDs
+    const productIds = sellerProducts.map(product => product._id);
+
+    // Step 3: Find orders that contain these products
+    const sellerOrders = await Order.find({
+      "carts.product": { $in: productIds },
+    }).populate("carts.product");
+
+    if (!sellerOrders || sellerOrders.length === 0) {
+      return res.status(404).json({ error: "No orders found for the seller" });
+    }
+
+    res.json(sellerOrders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error fetching seller orders" });
+  }
+};
 const createOrder = async (req, res) => {
   const userId = req.body.userId;
 
@@ -88,4 +113,9 @@ const createOrder = async (req, res) => {
   }
 };
 
-module.exports = { getAllOrders, getOrderByUserId, createOrder };
+module.exports = {
+  getAllOrders,
+  getOrderByUserId,
+  getOrdersBySellerId,
+  createOrder,
+};
