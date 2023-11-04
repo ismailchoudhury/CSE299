@@ -5,6 +5,7 @@ const {
   createProduct,
   getAllProducts,
   getProductById,
+  getProductsBySeller,
   updateProduct,
   deleteProduct,
   searchProducts,
@@ -18,9 +19,12 @@ router.get("/", getAllProducts); // Get a list of all products (for clients and 
 
 router.get("/getProductById/:productId", getProductById); // Get a single product by ID (for clients and admin)
 
-router.patch("/update", updateProduct); // Update a product by ID (only for the seller of the product)
+router.get("/getProductBySeller/:sellerId", getProductsBySeller); // Get a single product by Selelr ID (for seller)
+
+router.put("/:id", updateProduct); // Update a product by ID (only for the seller of the product)
 
 router.delete("/", deleteProduct); // Delete a product by ID (only for the seller of the product)
 
 router.get("/search", searchProducts);
+
 module.exports = router;

@@ -63,40 +63,51 @@ const getProductById = async (req, res) => {
   }
 };
 
-// Update a product by ID
+const getProductsBySeller = async (req, res) => {
+  try {
+    const sellerId = req.params.sellerId;
+    const seller = await Seller.findById(sellerId);
+    const productsBySeller = await Product.find({ seller: seller });
+
+    if (!productsBySeller || productsBySeller.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No products found for this seller" });
+    }
+    res.status(200).json(productsBySeller);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "Failed to retrieve products for the seller" });
+  }
+};
 const updateProduct = async (req, res) => {
   try {
     const { name, description, price, category, imgURL, stock } = req.body;
 
     const existingProduct = await Product.findById(req.params.id);
 
-    // Check if the seller is a verified seller and the product belongs to them
-    if (
-      !req.seller.isVerified ||
-      req.seller._id.toString() !== existingProduct.sellerID.toString()
-    ) {
-      return res
-        .status(403)
-        .json({ error: "Only the seller can update this product" });
-    }
+    const updateFields = {
+      name,
+      description,
+      price,
+      category,
+      imgURL,
+      stock,
+      // Add more fields as needed
+    };
 
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
-      {
-        name,
-        description,
-        price,
-        category,
-        imgURL,
-        seller,
-        stock,
-        // Add more fields as needed
-      },
+      updateFields,
       { new: true }
     );
+
     if (!updatedProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
+
     res.status(200).json(updatedProduct);
   } catch (err) {
     console.error(err);
@@ -163,6 +174,7 @@ module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
+  getProductsBySeller,
   updateProduct,
   deleteProduct,
   searchProducts,

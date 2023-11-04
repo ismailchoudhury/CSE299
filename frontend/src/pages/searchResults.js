@@ -1,7 +1,8 @@
 // SearchResults.js
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-// import "./searchResults.css";
+import { useLocation, Link } from "react-router-dom";
+import "./searchResults.css";
+
 function SearchResults() {
   const location = useLocation();
   const searchQuery = new URLSearchParams(location.search).get("keyword");
@@ -24,24 +25,26 @@ function SearchResults() {
   return (
     <div className="search-results-container">
       <h2>Search Results for "{searchQuery}"</h2>
-      {Array.isArray(searchResults) && searchResults.length > 0 ? (
-        <ul>
-          {searchResults.map((result, index) => (
-            <li key={index} className="search-result-item">
-              <h3 className="product-name">{result.name}</h3>
+      <ul className="product-list">
+        {searchResults.map((result, index) => (
+          <li key={result._id} className="product-item">
+            {result.imgURL && (
               <img
                 className="product-image"
                 src={result.imgURL}
                 alt={result.name}
               />
-              <p className="product-description">
-                Description: {result.description}
-              </p>
+            )}
+            <div className="product-details">
+              <h3 className="product-name smaller-name">
+                <Link to={`/product/${result._id}`}>{result.name}</Link>
+              </h3>
               <p className="product-price">Price: ${result.price}</p>
-            </li>
-          ))}
-        </ul>
-      ) : (
+            </div>
+          </li>
+        ))}
+      </ul>
+      {searchResults.length === 0 && (
         <p className="no-results-message">No results found.</p>
       )}
     </div>

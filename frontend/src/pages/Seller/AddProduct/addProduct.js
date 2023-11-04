@@ -1,16 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { AuthContext } from "../../../context/AuthContext";
+import { Link } from "react-router-dom";
+
+import "./addProduct.css";
 
 const AddProduct = () => {
+  const authContext = useContext(AuthContext);
+  let seller = null;
+
+  if (authContext.user) {
+    seller = authContext.user.Id;
+  }
+
   const [productData, setProductData] = useState({
     name: "",
     description: "",
-    price: "",
+    price: 0, // Set the initial price to 0
     category: "",
     imgURL: "",
-    seller: "",
+    sellerId: seller,
     stock: "",
+    // Include seller ID from authContext
   });
-
+  const [sellerProducts, setSellerProducts] = useState([]);
   const handleInputChange = e => {
     const { name, value } = e.target;
     setProductData({ ...productData, [name]: value });
@@ -41,13 +53,29 @@ const AddProduct = () => {
         price: "",
         category: "",
         imgURL: "",
-        seller: "",
         stock: "",
       });
     } catch (error) {
       console.error("An error occurred during the POST request:", error);
     }
   };
+
+  useEffect(() => {
+    // Fetch the seller's products and update the sellerProducts state
+    fetch(`/api/products/getProductBySeller/${seller}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(data => {
+        setSellerProducts(data);
+      })
+      .catch(error => {
+        console.error("Failed to fetch seller's products:", error);
+      });
+  }, [seller]);
 
   return (
     <div className="container mt-4">
@@ -118,19 +146,6 @@ const AddProduct = () => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="seller" className="form-label">
-            Seller:
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="seller"
-            name="seller"
-            value={productData.seller}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="mb-3">
           <label htmlFor="stock" className="form-label">
             Stock:
           </label>
@@ -147,6 +162,23 @@ const AddProduct = () => {
           Add Product
         </button>
       </form>
+      <h3>Your Products:</h3>
+      <ul>
+        {sellerProducts.map(product => (
+          <li key={product._id}>
+            <h2>
+              <Link to={`/updateProduct/${product._id}`}>{product.name}</Link>
+            </h2>{" "}
+            <p>Price: ৳{product.price}</p>
+            <img
+              src={product.imgURL}
+              alt={product.name}
+              width="150"
+              height="150"
+            />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

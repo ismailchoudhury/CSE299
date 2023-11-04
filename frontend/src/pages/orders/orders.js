@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import "./orders.css"; // Import a CSS file for your component (create this file if it doesn't exist)
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -33,25 +34,23 @@ const Orders = () => {
         <p>No orders found</p>
       ) : (
         <div className="orders-container">
-          <ul className="orders-list">
-            {orders.map(order => (
-              <li key={order._id} className="order-item">
-                <p className="order-id">Order ID: {order._id}</p>
-                <p className="order-date">Order Date: {order.orderDate}</p>
-                <ul className="order-products">
-                  {order.carts.map((cartItem, index) => (
-                    <li key={index}>
-                      {/* Pass the product ID to ProductDetails */}
-                      <ProductDetails productId={cartItem.product} />
-                      <p className="product-quantity">
-                        Quantity: {cartItem.quantity}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
+          {orders.map(order => (
+            <div key={order._id} className="order-box">
+              <p className="order-id">Order ID: {order._id}</p>
+              <p className="order-date">Order Date: {order.orderDate}</p>
+              <ul className="order-products">
+                {order.carts.map((cartItem, index) => (
+                  <li key={index} className="product-item">
+                    {/* Pass the product ID to ProductDetails */}
+                    <ProductDetails productId={cartItem.product} />
+                    <p className="product-quantity">
+                      Quantity: {cartItem.quantity}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       )}
     </div>

@@ -7,7 +7,7 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Navbar from "./components/Navbar";
-import AddProduct from "./pages/Seller/addProduct";
+import AddProduct from "./pages//Seller/AddProduct/addProduct";
 import SellerList from "./pages/Admin/verifySeller";
 import ProductHome from "./pages/productHome/productHome";
 import Cart from "./pages/Cart/cart";
@@ -16,6 +16,8 @@ import Orders from "./pages/orders/orders";
 import Checkout from "./pages/Checkout/checkout";
 import SearchResults from "./pages/searchResults";
 import ProductPage from "./pages/ProductPage/productPage";
+// import SellerHome from "./pages/Seller/updateProduct/updateProduct";
+import UpdateProduct from "./pages/Seller/updateProduct/updateProduct";
 function App() {
   // Use the useAuthContext hook to access the user info
   const user = JSON.parse(localStorage.getItem("user"));
@@ -47,6 +49,8 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/searchResults" element={<SearchResults />} />
           <Route path="/product/:productId" element={<ProductPage />} />
+          {/* <Route path="/sellerHome" element={<SellerHome />} /> */}
+          <Route path="/updateProduct/:productId" element={UpdateProduct} />
         </Routes>
       </BrowserRouter>
     </div>
