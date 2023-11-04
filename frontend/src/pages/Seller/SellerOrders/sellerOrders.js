@@ -6,14 +6,13 @@ const SellerOrders = () => {
   const sellerId = authContext.user.Id; // Get the seller's ID from the AuthContext
 
   const [orders, setOrders] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingOrders, setIsLoadingOrders] = useState(true);
 
   const ProductDetails = ({ productId }) => {
     const [product, setProduct] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingProduct, setIsLoadingProduct] = useState(true);
 
     useEffect(() => {
-      // Fetch product details based on the product ID
       fetch(`/api/products/getProductById/${productId}`)
         .then(response => {
           if (response.ok) {
@@ -23,16 +22,15 @@ const SellerOrders = () => {
         })
         .then(data => {
           setProduct(data);
-          setIsLoading(false);
-          console.log("Product data:", data); // Add this line for debugging
+          setIsLoadingProduct(false);
         })
         .catch(error => {
           console.error(error);
-          setIsLoading(false);
+          setIsLoadingProduct(false);
         });
     }, [productId]);
 
-    if (isLoading) {
+    if (isLoadingProduct) {
       return <p>Loading product details...</p>;
     }
 
@@ -54,8 +52,7 @@ const SellerOrders = () => {
   };
 
   useEffect(() => {
-    // Fetch seller-specific orders
-    fetch(`/api/orders/getOrdersBySellerId/${sellerId}`) // Replace with the actual API endpoint to get seller-specific orders
+    fetch(`/api/orders/getOrdersBySellerId/${sellerId}`)
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -63,19 +60,30 @@ const SellerOrders = () => {
         throw new Error("Error fetching seller orders");
       })
       .then(data => {
-        setOrders(data);
-        setIsLoading(false);
+        const productslist = data.map(order => {
+          const orderId = order._id;
+          const orderDate = order.orderDate;
+          const products = order.carts;
+
+          return {
+            _id: orderId,
+            orderDate: orderDate,
+            carts: products,
+          };
+        });
+        setOrders(productslist);
+        setIsLoadingOrders(false);
       })
       .catch(error => {
         console.error(error);
-        setIsLoading(false);
+        setIsLoadingOrders(false);
       });
   }, [sellerId]);
 
   return (
     <div className="seller-orders-page">
       <h1>Your Orders</h1>
-      {isLoading ? (
+      {isLoadingOrders ? (
         <p>Loading...</p>
       ) : orders.length === 0 ? (
         <p>No orders found for your products</p>

@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import "./orders.css"; // Import a CSS file for your component (create this file if it doesn't exist)
+import { AuthContext } from "../../context/AuthContext";
+import "./orders.css";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useContext(AuthContext); // Get the user object from the AuthContext
 
   useEffect(() => {
-    // Fetch user orders
-    fetch("/api/orders/") // Replace with the actual API endpoint
+    // Fetch orders for the logged-in user
+    fetch(`/api/orders/${user.Id}`) // Replace with the actual API endpoint
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -23,7 +25,7 @@ const Orders = () => {
         console.error(error);
         setIsLoading(false);
       });
-  }, []);
+  }, [user.Id]);
 
   return (
     <div className="orders-page">

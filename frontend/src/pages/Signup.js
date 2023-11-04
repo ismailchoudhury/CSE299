@@ -40,7 +40,6 @@ const Signup = () => {
         <label>Signup as:</label>
         <select value={userType} onChange={e => setUserType(e.target.value)}>
           <option value="">Select user type</option>
-          <option value="admin">Admin</option>
           <option value="customer">Customer</option>
           <option value="seller">Seller</option>
         </select>

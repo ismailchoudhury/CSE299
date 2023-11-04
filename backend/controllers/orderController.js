@@ -28,7 +28,7 @@ const getOrderByUserId = async (req, res) => {
 };
 const getOrdersBySellerId = async (req, res) => {
   try {
-    const sellerId = req.params.sellerId; // Assuming sellerId is provided as a route parameter
+    const sellerId = req.params.sellerId;
 
     // Step 1: Find products associated with the seller
     const sellerProducts = await Product.find({ seller: sellerId });
