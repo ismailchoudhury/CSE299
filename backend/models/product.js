@@ -17,13 +17,13 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  imgURL: {
-    type: String,
+  imgURLs: {
+    type: [String], // Store multiple image URLs in an array
     required: true,
   },
   seller: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Seller", // Referencing the "Seller" model
+    ref: "Seller",
     required: true,
   },
   stock: {

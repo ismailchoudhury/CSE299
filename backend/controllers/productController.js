@@ -4,8 +4,7 @@ const Seller = require("../models/sellerModel");
 // Create a new product
 const createProduct = async (req, res) => {
   try {
-    const { name, description, price, category, imgURL, sellerId, stock } =
-      req.body;
+    const { name, description, price, category, sellerId, stock } = req.body;
 
     // Find the seller by their ID
     const seller = await Seller.findOne({ _id: sellerId });
@@ -25,10 +24,25 @@ const createProduct = async (req, res) => {
       description,
       price,
       category,
-      imgURL,
       seller: sellerId,
       stock,
     });
+
+    // Handle image upload
+    if (req.files && req.files.image) {
+      const image = req.files.image;
+      const fileName = Date.now() + "-" + image.name;
+      const uploadPath = __dirname + "./../uploads/" + fileName;
+
+      image.mv(uploadPath, err => {
+        if (err) {
+          console.error(err);
+        } else {
+          product.imgURL = "./../uploads/" + fileName;
+        }
+      });
+    }
+
     await product.save();
     res.status(201).json(product);
   } catch (err) {
@@ -84,7 +98,7 @@ const getProductsBySeller = async (req, res) => {
 };
 const updateProduct = async (req, res) => {
   try {
-    const { name, description, price, category, imgURL, stock } = req.body;
+    const { name, description, price, category, stock } = req.body;
 
     const existingProduct = await Product.findById(req.params.id);
 
@@ -93,10 +107,21 @@ const updateProduct = async (req, res) => {
       description,
       price,
       category,
-      imgURL,
       stock,
-      // Add more fields as needed
     };
+
+    // Handle image upload
+    if (req.files && req.files.image) {
+      const image = req.files.image;
+      const fileName = Date.now() + "-" + image.name;
+      const uploadPath = __dirname + "./../uploads/" + fileName;
+
+      image.mv(uploadPath, err => {
+        if (!err) {
+          updateFields.imgURL = "./../uploads/" + fileName;
+        }
+      });
+    }
 
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
@@ -114,7 +139,6 @@ const updateProduct = async (req, res) => {
     res.status(500).json({ error: "Failed to update the product" });
   }
 };
-
 // Delete a product by ID
 const deleteProduct = async (req, res) => {
   try {

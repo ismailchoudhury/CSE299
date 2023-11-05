@@ -2,14 +2,13 @@ import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import { Link } from "react-router-dom";
 
-// import "./addProduct.css";
-
 const AddProduct = () => {
   const authContext = useContext(AuthContext);
   let seller = null;
 
   if (authContext.user) {
     seller = authContext.user.Id;
+  } else {
   }
 
   const [productData, setProductData] = useState({
@@ -17,29 +16,39 @@ const AddProduct = () => {
     description: "",
     price: 0, // Set the initial price to 0
     category: "",
-    imgURL: "",
+    imgURL: null, // For displaying images
     sellerId: seller,
     stock: "",
-    // Include seller ID from authContext
   });
   const [sellerProducts, setSellerProducts] = useState([]);
+
   const handleInputChange = e => {
     const { name, value } = e.target;
     setProductData({ ...productData, [name]: value });
   };
 
+  const handleImageChange = e => {
+    const file = e.target.files[0];
+    setProductData({ ...productData, imgURL: file });
+  };
   const handleSubmit = async e => {
     e.preventDefault();
+
+    // Create a FormData object to handle file uploads
+    const formData = new FormData();
+    formData.append("name", productData.name);
+    formData.append("description", productData.description);
+    formData.append("price", productData.price);
+    formData.append("category", productData.category);
+    formData.append("imgURL", productData.imgURL);
+    formData.append("seller", productData.seller);
+    formData.append("stock", productData.stock);
 
     try {
       const response = await fetch("/api/products/createproduct/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(productData),
+        body: formData, // Send the FormData object
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Error:", errorData);
@@ -47,12 +56,14 @@ const AddProduct = () => {
       }
 
       console.log("Product Data Submitted:", productData);
+
+      // Reset the form
       setProductData({
         name: "",
         description: "",
         price: "",
         category: "",
-        imgURL: "",
+        imgURL: null,
         stock: "",
       });
     } catch (error) {
@@ -65,7 +76,7 @@ const AddProduct = () => {
     fetch(`/api/products/getProductBySeller/${seller}`)
       .then(response => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          console.Error("Network response was not ok");
         }
         return response.json();
       })
@@ -132,19 +143,7 @@ const AddProduct = () => {
             onChange={handleInputChange}
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="imgURL" className="form-label">
-            Image URL:
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="imgURL"
-            name="imgURL"
-            value={productData.imgURL}
-            onChange={handleInputChange}
-          />
-        </div>
+
         <div className="mb-3">
           <label htmlFor="stock" className="form-label">
             Stock:
@@ -156,6 +155,18 @@ const AddProduct = () => {
             name="stock"
             value={productData.stock}
             onChange={handleInputChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="imgURL" className="form-label">
+            Upload Image:
+          </label>
+          <input
+            type="file"
+            className="form-control"
+            id="imgURL"
+            name="imgURL"
+            onChange={handleImageChange}
           />
         </div>
         <button type="submit" className="btn btn-primary">
