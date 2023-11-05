@@ -3,20 +3,21 @@ const Order = require("../models/orderModel");
 const Product = require("../models/product");
 const User = require("../models/userModel");
 const Cart = require("../models/cartModel");
-// const { getCart } = require("../controllers/cartController");
+
 const getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find().populate("carts");
+    const orders = await Order.find().populate("carts.product");
     res.json(orders);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Error fetching orders" });
   }
 };
+
 const getOrderByUserId = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const userOrders = await Order.find({ userId }).populate("carts");
+    const userOrders = await Order.find({ userId }).populate("carts.product");
     if (!userOrders || userOrders.length === 0) {
       return res.status(404).json({ error: "No orders found for the user" });
     }
@@ -26,6 +27,7 @@ const getOrderByUserId = async (req, res) => {
     res.status(500).json({ error: "Error fetching user orders" });
   }
 };
+
 const getOrdersBySellerId = async (req, res) => {
   try {
     const sellerId = req.params.sellerId;
@@ -51,6 +53,7 @@ const getOrdersBySellerId = async (req, res) => {
     res.status(500).json({ error: "Error fetching seller orders" });
   }
 };
+
 const createOrder = async (req, res) => {
   const userId = req.body.userId;
 
@@ -74,9 +77,7 @@ const createOrder = async (req, res) => {
       const quantity = cartItem.quantity;
 
       if (quantity > product.stock) {
-        return res.status(400).json({
-          error: `Quantity of ${product.name} exceeds product stock.`,
-        });
+        return new Error(`Quantity of ${product.name} exceeds product stock.`);
       }
 
       // Update the stock of the product
@@ -93,12 +94,24 @@ const createOrder = async (req, res) => {
 
     // Check if any order item failed due to stock limitations
     if (orderItemsPromises.some(item => item instanceof Error)) {
-      return;
+      return res.status(400).json({
+        error: orderItemsPromises
+          .filter(item => item instanceof Error)
+          .map(item => item.message),
+      });
     }
+
+    const totalAmount = orderItemsPromises.reduce(
+      (total, item) => total + item.product.price * item.quantity,
+      0
+    );
 
     const order = new Order({
       userId: user._id,
       carts: orderItemsPromises,
+      totalAmount: totalAmount,
+      address: req.body.address, // Add the address to the order
+      phoneNumber: req.body.phoneNumber, // Add the phone number to the order
     });
 
     await order.save();
