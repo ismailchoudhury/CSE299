@@ -5,7 +5,7 @@ import "./orders.css";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingOrders, setIsLoadingOrders] = useState(true);
   const { user } = useContext(AuthContext); // Get the user object from the AuthContext
 
   useEffect(() => {
@@ -19,18 +19,18 @@ const Orders = () => {
       })
       .then(data => {
         setOrders(data);
-        setIsLoading(false);
+        setIsLoadingOrders(false);
       })
       .catch(error => {
         console.error(error);
-        setIsLoading(false);
+        setIsLoadingOrders(false);
       });
   }, [user.Id]);
 
   return (
     <div className="orders-page">
       <h1>Orders</h1>
-      {isLoading ? (
+      {isLoadingOrders ? (
         <p>Loading...</p>
       ) : orders.length === 0 ? (
         <p>No orders found</p>
@@ -40,11 +40,16 @@ const Orders = () => {
             <div key={order._id} className="order-box">
               <p className="order-id">Order ID: {order._id}</p>
               <p className="order-date">Order Date: {order.orderDate}</p>
+              <p className="delivery-date">
+                Delivery Date: {order.deliveryDate}
+              </p>
+              <p className="address">Address: {order.address}</p>
+              <p className="phone-number">Phone Number: {order.phoneNumber}</p>
               <ul className="order-products">
                 {order.carts.map((cartItem, index) => (
                   <li key={index} className="product-item">
                     {/* Pass the product ID to ProductDetails */}
-                    <ProductDetails productId={cartItem.product} />
+                    <ProductDetails productId={cartItem.productId} />
                     <p className="product-quantity">
                       Quantity: {cartItem.quantity}
                     </p>
@@ -61,31 +66,28 @@ const Orders = () => {
 
 const ProductDetails = ({ productId }) => {
   const [product, setProduct] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingProduct, setIsLoadingProduct] = useState(true);
 
   useEffect(() => {
     // Fetch product details based on the product ID
-    // console.log(`Fetching product details for productId: ${productId}`);
     fetch(`/api/products/getProductById/${productId}`)
       .then(response => {
-        // console.log("Response:", response);
         if (response.ok) {
           return response.json();
         }
         throw new Error("Error fetching product details");
       })
       .then(data => {
-        // console.log("Product data:", data);
         setProduct(data);
-        setIsLoading(false); // Set isLoading to false when the data is loaded
+        setIsLoadingProduct(false);
       })
       .catch(error => {
         console.error(error);
-        setIsLoading(false); // Set isLoading to false when there's an error
+        setIsLoadingProduct(false);
       });
   }, [productId]);
 
-  if (isLoading) {
+  if (isLoadingProduct) {
     return <p>Loading product details...</p>;
   }
 

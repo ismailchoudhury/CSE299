@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
 import "./updateProduct.css";
 const UpdateProduct = () => {
   const { productId } = useParams();
   const authContext = useContext(AuthContext);
-
+  const navigate = useNavigate();
   let userId = null;
 
   if (authContext.user) {
@@ -68,6 +68,7 @@ const UpdateProduct = () => {
 
       if (response.ok) {
         console.log("Product updated successfully");
+        navigate("/addProduct");
         // You can add code here to handle the success case, e.g., redirect or display a success message
       } else {
         console.error("Error updating product");
@@ -90,6 +91,7 @@ const UpdateProduct = () => {
 
         if (response.ok) {
           console.log("Product deleted successfully");
+          navigate("/addProduct");
           // You can add code here to handle the success case, e.g., display a success message
         } else {
           console.error("Error deleting product");
@@ -232,7 +234,9 @@ const UpdateProduct = () => {
       >
         Delete Product
       </button>
-      <Link to="/addProduct">Go back to your products</Link>
+      <button>
+        <Link to="/addProduct">Go back to your products</Link>
+      </button>
     </div>
   );
 };
