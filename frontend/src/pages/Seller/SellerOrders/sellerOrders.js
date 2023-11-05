@@ -3,7 +3,7 @@ import { AuthContext } from "../../../context/AuthContext";
 
 const SellerOrders = () => {
   const authContext = useContext(AuthContext);
-  const sellerId = authContext.user.Id; // Get the seller's ID from the AuthContext
+  const sellerId = authContext.user.Id;
 
   const [orders, setOrders] = useState([]);
   const [isLoadingOrders, setIsLoadingOrders] = useState(true);
@@ -51,6 +51,14 @@ const SellerOrders = () => {
     );
   };
 
+  function formatDate(date) {
+    if (date) {
+      const formattedDate = new Date(date).toISOString().split("T")[0];
+      return formattedDate;
+    }
+    return "N/A";
+  }
+
   useEffect(() => {
     fetch(`/api/orders/getOrdersBySellerId/${sellerId}`)
       .then(response => {
@@ -62,9 +70,11 @@ const SellerOrders = () => {
       .then(data => {
         const productslist = data.map(order => {
           const orderId = order._id;
-          const orderDate = order.orderDate;
+          const orderDate = formatDate(order.orderDate);
+          const deliveryDate = formatDate(order.deliveryDate);
+          const address = order.address;
+          const phoneNumber = order.phoneNumber;
 
-          // Mapping through carts array to get product information
           const products = order.carts.map(cartItem => {
             return {
               productId: cartItem.product._id,
@@ -76,6 +86,9 @@ const SellerOrders = () => {
             _id: orderId,
             orderDate: orderDate,
             carts: products,
+            deliveryDate: deliveryDate,
+            address: address,
+            phoneNumber: phoneNumber,
           };
         });
         setOrders(productslist);
@@ -100,6 +113,11 @@ const SellerOrders = () => {
             <div key={order._id} className="order-box">
               <p className="order-id">Order ID: {order._id}</p>
               <p className="order-date">Order Date: {order.orderDate}</p>
+              <p className="delivery-date">
+                Delivery Date: {order.deliveryDate}
+              </p>
+              <p className="address">Address : {order.address}</p>
+              <p className="phoneNumber">Contact Number: {order.phoneNumber}</p>
               <ul className="order-products">
                 {order.carts.map((cartItem, index) => (
                   <li key={index} className="product-item">

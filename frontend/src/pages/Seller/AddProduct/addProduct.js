@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import { Link } from "react-router-dom";
 
-import "./addProduct.css";
+// import "./addProduct.css";
 
 const AddProduct = () => {
   const authContext = useContext(AuthContext);

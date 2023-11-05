@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
-
+import "./updateProduct.css";
 const UpdateProduct = () => {
   const { productId } = useParams();
   const authContext = useContext(AuthContext);
@@ -77,27 +77,25 @@ const UpdateProduct = () => {
     }
   };
   const handleDeleteProduct = async () => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      if (userId) {
-        try {
-          const deleteProductUrl = `/api/products/${productId}`;
-          const response = await fetch(deleteProductUrl, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ sellerId: userId, productId }),
-          });
+    if (userId) {
+      try {
+        const deleteProductUrl = `/api/products/`;
+        const response = await fetch(deleteProductUrl, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ sellerId: userId, productId }),
+        });
 
-          if (response.ok) {
-            console.log("Product deleted successfully");
-            // You can add code here to handle the success case, e.g., display a success message
-          } else {
-            console.error("Error deleting product");
-          }
-        } catch (error) {
-          console.error("Error: " + error.message);
+        if (response.ok) {
+          console.log("Product deleted successfully");
+          // You can add code here to handle the success case, e.g., display a success message
+        } else {
+          console.error("Error deleting product");
         }
+      } catch (error) {
+        console.error("Error: " + error.message);
       }
     }
   };
@@ -110,112 +108,118 @@ const UpdateProduct = () => {
     <div className="container mt-4">
       <h3>Edit Product: {product.name}</h3>
       <form onSubmit={handleUpdateProduct}>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">
-            Product Name:
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            name="name"
-            value={updatedProductData.name}
-            onChange={e =>
-              setUpdatedProductData({
-                ...updatedProductData,
-                name: e.target.value,
-              })
-            }
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="description" className="form-label">
-            Description:
-          </label>
-          <textarea
-            className="form-control"
-            id="description"
-            name="description"
-            value={updatedProductData.description}
-            onChange={e =>
-              setUpdatedProductData({
-                ...updatedProductData,
-                description: e.target.value,
-              })
-            }
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="price" className="form-label">
-            Price:
-          </label>
-          <input
-            type="number"
-            className="form-control"
-            id="price"
-            name="price"
-            value={updatedProductData.price}
-            onChange={e =>
-              setUpdatedProductData({
-                ...updatedProductData,
-                price: e.target.value,
-              })
-            }
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="category" className="form-label">
-            Category:
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="category"
-            name="category"
-            value={updatedProductData.category}
-            onChange={e =>
-              setUpdatedProductData({
-                ...updatedProductData,
-                category: e.target.value,
-              })
-            }
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="imgURL" className="form-label">
-            Image URL:
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="imgURL"
-            name="imgURL"
-            value={updatedProductData.imgURL}
-            onChange={e =>
-              setUpdatedProductData({
-                ...updatedProductData,
-                imgURL: e.target.value,
-              })
-            }
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="stock" className="form-label">
-            Stock:
-          </label>
-          <input
-            type="number"
-            className="form-control"
-            id="stock"
-            name="stock"
-            value={updatedProductData.stock}
-            onChange={e =>
-              setUpdatedProductData({
-                ...updatedProductData,
-                stock: e.target.value,
-              })
-            }
-          />
+        <div className="row">
+          <div className="col-md-6">
+            <div className="mb-3">
+              <label htmlFor="name" className="form-label">
+                Product Name:
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="name"
+                name="name"
+                value={updatedProductData.name}
+                onChange={e =>
+                  setUpdatedProductData({
+                    ...updatedProductData,
+                    name: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="description" className="form-label">
+                Description:
+              </label>
+              <textarea
+                className="form-control"
+                id="description"
+                name="description"
+                value={updatedProductData.description}
+                onChange={e =>
+                  setUpdatedProductData({
+                    ...updatedProductData,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="price" className="form-label">
+                Price:
+              </label>
+              <input
+                type="number"
+                className="form-control"
+                id="price"
+                name="price"
+                value={updatedProductData.price}
+                onChange={e =>
+                  setUpdatedProductData({
+                    ...updatedProductData,
+                    price: e.target.value,
+                  })
+                }
+              />
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="mb-3">
+              <label htmlFor="category" className="form-label">
+                Category:
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="category"
+                name="category"
+                value={updatedProductData.category}
+                onChange={e =>
+                  setUpdatedProductData({
+                    ...updatedProductData,
+                    category: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="imgURL" className="form-label">
+                Image URL:
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="imgURL"
+                name="imgURL"
+                value={updatedProductData.imgURL}
+                onChange={e =>
+                  setUpdatedProductData({
+                    ...updatedProductData,
+                    imgURL: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="stock" className="form-label">
+                Stock:
+              </label>
+              <input
+                type="number"
+                className="form-control"
+                id="stock"
+                name="stock"
+                value={updatedProductData.stock}
+                onChange={e =>
+                  setUpdatedProductData({
+                    ...updatedProductData,
+                    stock: e.target.value,
+                  })
+                }
+              />
+            </div>
+          </div>
         </div>
         <button type="submit" className="btn btn-primary">
           Update Product

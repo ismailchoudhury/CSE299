@@ -7,6 +7,8 @@ const Checkout = () => {
   const { user } = useAuthContext();
   const [cart, setCart] = useState([]);
   const [deliveryDate, setDeliveryDate] = useState("");
+  const [address, setAddress] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchCart = async () => {
@@ -51,20 +53,24 @@ const Checkout = () => {
     const formattedDate = today.toISOString().split("T")[0];
     return formattedDate;
   };
+
   const handleConfirmOrder = async () => {
     try {
-      // Create a new order
       const createOrderResponse = await fetch("/api/orders/createOrder", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId: user.Id, userCart: cart }),
+        body: JSON.stringify({
+          userId: user.Id,
+          userCart: cart,
+          address: address,
+          phoneNumber: phoneNumber,
+          totalAmount: calculateTotal(),
+        }),
       });
 
       if (createOrderResponse.ok) {
-        // Order created successfully
-        // Proceed to delete the cart
         const deleteCartResponse = await fetch(
           `/api/cart/delete-cart/${user.Id}`,
           {
@@ -76,9 +82,7 @@ const Checkout = () => {
         );
 
         if (deleteCartResponse.ok) {
-          // Cart deleted successfully
-          // Redirect to "/productHome"
-          // props.history.push("/productHome");
+          // After successful order confirmation, use Link to navigate to /productHome
         } else {
           console.error("Error deleting cart:", deleteCartResponse.status);
         }
@@ -124,7 +128,19 @@ const Checkout = () => {
               Expected Delivery Date: {deliveryDate}
             </p>
           </div>
-          <div className="checkout-button-container">
+          <div className="checkout-form">
+            <input
+              type="text"
+              placeholder="Address"
+              value={address}
+              onChange={e => setAddress(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Phone Number"
+              value={phoneNumber}
+              onChange={e => setPhoneNumber(e.target.value)}
+            />
             <Link to="/productHome">
               <button className="checkout-button" onClick={handleConfirmOrder}>
                 Confirm Order
