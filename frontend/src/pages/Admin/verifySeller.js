@@ -65,33 +65,37 @@ function SellerList() {
 
   return (
     <div className="seller-list">
-      <h3>Unverified Seller List</h3>
-      <ul>
-        {sellers.map(seller => (
-          <li key={seller._id}>
-            <p>ID: {seller._id}</p>
-            <p>Email: {seller.email}</p>
-            {!seller.isVerified && (
-              <button
-                onClick={() => handleVerifySeller(seller._id)}
-                className="verify-button"
-              >
-                Verify Seller
-              </button>
-            )}
-          </li>
-        ))}
-      </ul>
+      <div className="unverified-box">
+        <h3>Unverified Seller List</h3>
+        <ul>
+          {sellers.map(seller => (
+            <li key={seller._id}>
+              <p>ID: {seller._id}</p>
+              <p>Email: {seller.email}</p>
+              {!seller.isVerified && (
+                <button
+                  onClick={() => handleVerifySeller(seller._id)}
+                  className="verify-button"
+                >
+                  Verify Seller
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
 
-      <h3>Approved Seller List</h3>
-      <ul className="approved-seller-list">
-        {approvedSellers.map(seller => (
-          <li key={seller._id}>
-            <p>ID: {seller._id}</p>
-            <p>Email: {seller.email}</p>
-          </li>
-        ))}
-      </ul>
+      <div className="approved-box">
+        <h3>Approved Seller List</h3>
+        <ul className="approved-seller-list">
+          {approvedSellers.map(seller => (
+            <li key={seller._id}>
+              <p>ID: {seller._id}</p>
+              <p>Email: {seller.email}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useLogin } from "../hooks/useLogin";
+import { useLogin } from "../../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
-
+import "./Login.css";
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -36,18 +36,20 @@ const Login = () => {
     <form className="login" onSubmit={handleLogin}>
       <h3>Log In</h3>
 
-      <label>Email address:</label>
+      <label className="email-lebal"></label>
       <input
         type="email"
         onChange={e => setEmail(e.target.value)}
         value={email}
+        placeholder="Enter your email"
       />
 
-      <label>Password:</label>
+      <label className="password-lebal"></label>
       <input
         type="password"
         onChange={e => setPassword(e.target.value)}
         value={password}
+        placeholder="Enter your password"
       />
 
       <div className="options">

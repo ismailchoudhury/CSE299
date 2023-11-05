@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useSignup } from "../hooks/useSignup";
-
+import { useSignup } from "../../hooks/useSignup";
+import "./Signup.css";
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,17 +24,20 @@ const Signup = () => {
     <form className="signup" onSubmit={handleSubmit}>
       <h3>Sign Up</h3>
 
-      <label>Email address:</label>
+      <label className="email-lebal"></label>
       <input
         type="email"
         onChange={e => setEmail(e.target.value)}
         value={email}
+        placeholder="Enter your email"
       />
-      <label>Password:</label>
+
+      <label className="password-lebal"></label>
       <input
         type="password"
         onChange={e => setPassword(e.target.value)}
         value={password}
+        placeholder="Enter your password"
       />
       <div className="options">
         <label>Signup as:</label>

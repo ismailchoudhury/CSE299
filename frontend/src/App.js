@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 // pages & components
 import Home from "./pages/Home/Home";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Login from "./pages/Login/Login";
+import Signup from "./pages/Signup/Signup";
 import Navbar from "./components/Navbar";
 import AddProduct from "./pages//Seller/AddProduct/addProduct";
 import SellerList from "./pages/Admin/verifySeller";
