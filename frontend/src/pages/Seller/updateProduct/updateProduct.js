@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
-// import "./updateProduct.css";
+import "./updateProduct.css";
 const UpdateProduct = () => {
   const { productId } = useParams();
   const authContext = useContext(AuthContext);
@@ -107,7 +107,7 @@ const UpdateProduct = () => {
   }
 
   return (
-    <div className="container mt-4">
+    <div className="containerUpdate mt-4">
       <h3>Edit Product: {product.name}</h3>
       <form onSubmit={handleUpdateProduct}>
         <div className="row">
@@ -235,7 +235,9 @@ const UpdateProduct = () => {
         Delete Product
       </button>
       <button>
-        <Link to="/addProduct">Go back to your products</Link>
+        <Link to="/addProduct" className="goBackLink">
+          Go back to your products
+        </Link>
       </button>
     </div>
   );

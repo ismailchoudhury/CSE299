@@ -1,117 +1,60 @@
-import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../../../context/AuthContext";
+/* verifySeller.css */
 
-const SellerOrders = () => {
-  const authContext = useContext(AuthContext);
-  const sellerId = authContext.user.Id; // Get the seller's ID from the AuthContext
+/* Centering the .seller-list component */
+.seller-list {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 20px;
+  gap: 20px;
+}
 
-  const [orders, setOrders] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+/* Styling for each box */
+.unverified-box,
+.approved-box {
+  flex-basis: 48%;
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+}
 
-  const ProductDetails = ({ productId }) => {
-    const [product, setProduct] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+.approved-box {
+  background-color: #e6f7e3;
+  border-color: #c3e6cb;
+}
 
-    useEffect(() => {
-      // Fetch product details based on the product ID
-      fetch(`/api/products/getProductById/${productId}`)
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error("Error fetching product details");
-        })
-        .then(data => {
-          //console.log(data);
-          setProduct(data);
-          setIsLoading(false);
-          console.log("Product data:", data); // Add this line for debugging
-        })
-        .catch(error => {
-          console.error(error);
-          setIsLoading(false);
-        });
-    }, [productId]);
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 
-    if (isLoading) {
-      return <p>Loading product details...</p>;
-    }
+li {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+}
 
-    if (!product) {
-      return <p>Product details not found.</p>;
-    }
+.seller-details p {
+  margin: 5px 0;
+}
 
-    return (
-      <div>
-        <p className="product-name">Product Name: {product.name}</p>
-        <p className="product-price">Price: ৳{product.price}</p>
-        <img
-          src={product.imgURL}
-          alt={product.name}
-          className="product-image"
-        />
-      </div>
-    );
-  };
+button.verify-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+  display: block;
+  margin-top: 10px;
+}
 
-  useEffect(() => {
-    // Fetch seller-specific orders
-    console.log(sellerId);
-    fetch(`/api/orders/getOrdersBySellerId/${sellerId}`) // Replace with the actual API endpoint to get seller-specific orders
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Error fetching seller orders");
-      })
-      .then(data => {
-        console.log(data);
-        const productslist = data.map(d => {
-          const products = d.carts;
-
-          return {
-            products: products,
-          };
-        });
-        console.log(productslist);
-        setOrders(productslist);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-        setIsLoading(false);
-      });
-  }, [sellerId]);
-
-  return (
-    <div className="seller-orders-page">
-      <h1>Your Orders</h1>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : orders.length === 0 ? (
-        <p>No orders found for your products</p>
-      ) : (
-        <div className="orders-container">
-          {orders.map(order => (
-            <div key={order._id} className="order-box">
-              <p className="order-id">Order ID: {order._id}</p>
-              <p className="order-date">Order Date: {order.orderDate}</p>
-              <ul className="order-products">
-                {order.carts.map((cartItem, index) => (
-                  <li key={index} className="product-item">
-                    <ProductDetails productId={cartItem.product} />
-                    <p className="product-quantity">
-                      Quantity: {cartItem.quantity}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default SellerOrders;
+button.verify-button:hover {
+  background-color: #0056b3;
+}

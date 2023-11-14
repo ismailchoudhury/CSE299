@@ -15,14 +15,16 @@ const AddProduct = () => {
   const [productData, setProductData] = useState({
     name: "",
     description: "",
-    price: 0, // Set the initial price to 0
+    price: 0,
     category: "",
     imgURL: "",
     sellerId: seller,
     stock: "",
-    // Include seller ID from authContext
   });
+
   const [sellerProducts, setSellerProducts] = useState([]);
+  const [productAdded, setProductAdded] = useState(false); // New state for re-fetching
+
   const handleInputChange = e => {
     const { name, value } = e.target;
     setProductData({ ...productData, [name]: value });
@@ -55,6 +57,9 @@ const AddProduct = () => {
         imgURL: "",
         stock: "",
       });
+
+      // Set productAdded to true to trigger re-fetching
+      setProductAdded(true);
     } catch (error) {
       console.error("An error occurred during the POST request:", error);
     }
@@ -62,37 +67,56 @@ const AddProduct = () => {
 
   useEffect(() => {
     // Fetch the seller's products and update the sellerProducts state
-    fetch(`/api/products/getProductBySeller/${seller}`)
-      .then(response => {
+    const fetchSellerProducts = async () => {
+      try {
+        const response = await fetch(
+          `/api/products/getProductBySeller/${seller}`
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        return response.json();
-      })
-      .then(data => {
+        const data = await response.json();
         setSellerProducts(data);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error("Failed to fetch seller's products:", error);
-      });
-  }, [seller]);
+      }
+    };
 
+    // Fetch when the component mounts or when productAdded changes
+    fetchSellerProducts();
+    setProductAdded(false); // Reset productAdded after fetching
+  }, [seller, productAdded]);
   return (
-    <div className="container mt-4">
+    <div className="containerAdd mt-4">
       <h3>Add a Product</h3>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">
-            Product Name:
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            name="name"
-            value={productData.name}
-            onChange={handleInputChange}
-          />
+        <div className="form-row">
+          <div className="mb-3">
+            <label htmlFor="name" className="form-label">
+              Product Name:
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="name"
+              name="name"
+              value={productData.name}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="category" className="form-label">
+              Category:
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="category"
+              name="category"
+              value={productData.category}
+              onChange={handleInputChange}
+            />
+          </div>
         </div>
         <div className="mb-3">
           <label htmlFor="description" className="form-label">
@@ -106,20 +130,35 @@ const AddProduct = () => {
             onChange={handleInputChange}
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="price" className="form-label">
-            Price:
-          </label>
-          <input
-            type="number"
-            className="form-control"
-            id="price"
-            name="price"
-            value={productData.price}
-            onChange={handleInputChange}
-          />
+        <div className="form-row">
+          <div className="mb-3">
+            <label htmlFor="price" className="form-label">
+              Price:
+            </label>
+            <input
+              type="number"
+              className="form-control"
+              id="price"
+              name="price"
+              value={productData.price}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="stock" className="form-label">
+              Stock:
+            </label>
+            <input
+              type="number"
+              className="form-control"
+              id="stock"
+              name="stock"
+              value={productData.stock}
+              onChange={handleInputChange}
+            />
+          </div>
         </div>
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <label htmlFor="category" className="form-label">
             Category:
           </label>
@@ -131,7 +170,7 @@ const AddProduct = () => {
             value={productData.category}
             onChange={handleInputChange}
           />
-        </div>
+        </div> */}
         <div className="mb-3">
           <label htmlFor="imgURL" className="form-label">
             Image URL:
@@ -145,7 +184,7 @@ const AddProduct = () => {
             onChange={handleInputChange}
           />
         </div>
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <label htmlFor="stock" className="form-label">
             Stock:
           </label>
@@ -157,7 +196,7 @@ const AddProduct = () => {
             value={productData.stock}
             onChange={handleInputChange}
           />
-        </div>
+        </div> */}
         <button type="submit" className="btn btn-primary">
           Add Product
         </button>

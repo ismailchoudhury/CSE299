@@ -1,59 +1,35 @@
-/* verifySeller.css */
-
-/* Centering the .seller-list component */
-.seller-list {
-  width: 800px; /* Increased width to accommodate two lists side by side */
-  margin: 0 auto;
-  padding: 20px;
-  display: flex; /* Enable flexbox layout */
-  flex-wrap: wrap; /* Allow items to wrap to the next row */
-  justify-content: space-between; /* Distribute items with space between */
-  gap: 20px; /* Add spacing between items */
+.seller-list-page {
+  text-align: center;
 }
 
-/* Styling for the "Unverified Seller List" box */
-.unverified-box {
-  width: 800px;
-  flex: 1; /* Each box occupies half of the available space */
-  background-color: #f2f2f2;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 10px;
+.lists-container {
+  display: flex;
+  justify-content: space-between;
 }
 
-/* Styling for the "Approved Seller List" box */
+.unverified-box,
 .approved-box {
-  flex: 1; /* Each box occupies half of the available space */
-  background-color: #e6f7e3;
-  border: 1px solid #c3e6cb;
-  border-radius: 10px;
-  padding: 10px;
+  width: 48%; /* Adjust the width as needed */
+  border: 1px solid #ddd;
+  background-color: #f2f2f2;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
+.seller-item {
+  margin-bottom: 10px;
 }
 
-li {
-  margin-bottom: 15px;
-  border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s;
-}
-
-button.verify-button {
+.verify-button {
+  padding: 8px;
   background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 5px;
-  padding: 8px 15px;
   cursor: pointer;
 }
 
-button.verify-button:hover {
+.verify-button:hover {
   background-color: #0056b3;
 }
-
-/* Add additional styles or customizations as needed */

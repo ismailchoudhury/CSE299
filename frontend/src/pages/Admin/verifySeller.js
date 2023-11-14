@@ -64,37 +64,44 @@ function SellerList() {
   };
 
   return (
-    <div className="seller-list">
-      <div className="unverified-box">
-        <h3>Unverified Seller List</h3>
-        <ul>
-          {sellers.map(seller => (
-            <li key={seller._id}>
-              <p>ID: {seller._id}</p>
-              <p>Email: {seller.email}</p>
-              {!seller.isVerified && (
-                <button
-                  onClick={() => handleVerifySeller(seller._id)}
-                  className="verify-button"
-                >
-                  Verify Seller
-                </button>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className="seller-list-page">
+      {/* <h1>Seller List</h1> */}
+      <div className="lists-container">
+        <div className="unverified-box">
+          <h3>Unverified Seller List</h3>
+          <ul>
+            {sellers.map(seller => (
+              <li key={seller._id} className="seller-item">
+                <p>ID: {seller._id}</p>
+                <p>Email: {seller.email}</p>
+                {!seller.isVerified && (
+                  <button
+                    onClick={() => handleVerifySeller(seller._id)}
+                    className="verify-button"
+                  >
+                    Verify Seller
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
 
-      <div className="approved-box">
-        <h3>Approved Seller List</h3>
-        <ul className="approved-seller-list">
-          {approvedSellers.map(seller => (
-            <li key={seller._id}>
-              <p>ID: {seller._id}</p>
-              <p>Email: {seller.email}</p>
-            </li>
-          ))}
-        </ul>
+        {approvedSellers.length === 0 ? (
+          <p>No approved sellers found</p>
+        ) : (
+          <div className="approved-box">
+            <h3>Approved Seller List</h3>
+            <ul>
+              {approvedSellers.map(seller => (
+                <li key={seller._id} className="seller-item">
+                  <p>ID: {seller._id}</p>
+                  <p>Email: {seller.email}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
